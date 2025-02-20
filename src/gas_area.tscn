@@ -1,0 +1,48 @@
+[gd_scene load_steps=4 format=3 uid="uid://dfhtx7st5g28s"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ygunj"]
+size = Vector3(5, 5, 5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0vuys"]
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_mgmlr"]
+size = Vector2(0.2, 0.2)
+
+[node name="GasArea" type="Area3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_ygunj")
+
+[node name="CPUParticles3D" type="CPUParticles3D" parent="."]
+material_override = SubResource("StandardMaterial3D_0vuys")
+amount = 128
+lifetime = 2.0
+preprocess = 1.0
+randomness = 0.5
+draw_order = 2
+mesh = SubResource("QuadMesh_mgmlr")
+emission_shape = 3
+emission_box_extents = Vector3(2.75, 2.75, 2.75)
+direction = Vector3(0, 1, 0)
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.5
+initial_velocity_max = 2.0
+angular_velocity_min = -15.0
+angular_velocity_max = 15.0
+linear_accel_min = -5.0
+linear_accel_max = 5.0
+radial_accel_min = -5.0
+radial_accel_max = 5.0
+tangential_accel_min = -5.0
+tangential_accel_max = 5.0
+damping_min = 5.0
+damping_max = 25.0
+angle_min = -5.0
+angle_max = 5.0
+anim_speed_min = 1.0
+anim_speed_max = 2.0
+anim_offset_max = 0.5

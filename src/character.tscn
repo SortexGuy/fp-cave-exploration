@@ -1,0 +1,157 @@
+[gd_scene load_steps=11 format=3 uid="uid://bed8les37cpj3"]
+
+[ext_resource type="Script" path="res://src/player_character.gd" id="1_8qmik"]
+[ext_resource type="Resource" uid="uid://csctq2870tbi7" path="res://resources/player_inventory.res" id="2_73b0v"]
+[ext_resource type="Script" path="res://src/hurt_box.gd" id="2_jp1m0"]
+[ext_resource type="Script" path="res://src/heads_up_display.gd" id="3_gamiv"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uegv6"]
+radius = 0.4
+height = 0.8
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0guc3"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_bgugt"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gsaiu"]
+radius = 0.4
+height = 1.2
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_y7ieu"]
+radius = 0.4
+height = 1.4
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_1c4t4"]
+height = 0.5
+radius = 0.2
+
+[node name="PlayerCharacter" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 5
+floor_constant_speed = true
+floor_snap_length = 0.2
+script = ExtResource("1_8qmik")
+inventory = ExtResource("2_73b0v")
+WALK_SPEED = 4.0
+mouse_sens = 0.1
+
+[node name="LowBodyCollision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("CapsuleShape3D_uegv6")
+
+[node name="HighBodyCollision" type="CollisionShape3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+shape = SubResource("CapsuleShape3D_0guc3")
+
+[node name="PlaceholderBodyMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_bgugt")
+
+[node name="HurtBoxes" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="LowBody" type="Area3D" parent="HurtBoxes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+monitoring = false
+script = ExtResource("2_jp1m0")
+
+[node name="CollShape" type="CollisionShape3D" parent="HurtBoxes/LowBody"]
+shape = SubResource("CapsuleShape3D_gsaiu")
+
+[node name="HighBody" type="Area3D" parent="HurtBoxes"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+monitoring = false
+script = ExtResource("2_jp1m0")
+
+[node name="CollShape" type="CollisionShape3D" parent="HurtBoxes/HighBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
+shape = SubResource("CapsuleShape3D_y7ieu")
+
+[node name="HeadPivot" type="Node3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+
+[node name="MainCamera" type="Camera3D" parent="HeadPivot"]
+unique_name_in_owner = true
+current = true
+
+[node name="Flashlight" type="SpotLight3D" parent="HeadPivot/MainCamera"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -0.3)
+visible = false
+spot_range = 30.0
+spot_attenuation = 1.4
+spot_angle = 40.0
+spot_angle_attenuation = 3.0
+
+[node name="WallClimbCast" type="ShapeCast3D" parent="HeadPivot/MainCamera"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CylinderShape3D_1c4t4")
+collision_mask = 16
+
+[node name="HeadPositions" type="Node3D" parent="."]
+
+[node name="HighHead" type="Marker3D" parent="HeadPositions"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+
+[node name="LowHead" type="Marker3D" parent="HeadPositions"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_gamiv")
+
+[node name="Control" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="InventoryContainer" type="HBoxContainer" parent="HUD/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.58
+anchor_top = 0.87
+anchor_right = 0.98
+anchor_bottom = 0.98
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 16
+
+[node name="ReferenceRect" type="ReferenceRect" parent="HUD/Control/InventoryContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+editor_only = false
+
+[node name="ReferenceRect2" type="ReferenceRect" parent="HUD/Control/InventoryContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+editor_only = false
+
+[node name="ReferenceRect3" type="ReferenceRect" parent="HUD/Control/InventoryContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+editor_only = false
+
+[node name="ReferenceRect4" type="ReferenceRect" parent="HUD/Control/InventoryContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+editor_only = false
+
+[node name="ReferenceRect5" type="ReferenceRect" parent="HUD/Control/InventoryContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+editor_only = false
+
+[connection signal="take_damage" from="HurtBoxes/LowBody" to="." method="_on_hurt_boxes_take_damage"]
+[connection signal="take_damage" from="HurtBoxes/HighBody" to="." method="_on_hurt_boxes_take_damage"]
