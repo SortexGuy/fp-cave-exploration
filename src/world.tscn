@@ -1,11 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://coq2iqn1v0an"]
+[gd_scene load_steps=4 format=3 uid="uid://coq2iqn1v0an"]
 
 [ext_resource type="PackedScene" uid="uid://bed8les37cpj3" path="res://src/character.tscn" id="1_0dk8b"]
-[ext_resource type="PackedScene" uid="uid://ck86cas04l8j3" path="res://assets/CaveMapTD2.glb" id="2_baacr"]
+[ext_resource type="PackedScene" uid="uid://d0a6xe7db70cd" path="res://assets/CaveMapFinalwColision.glb" id="2_8dq4i"]
+[ext_resource type="Environment" uid="uid://txh7lljvhq1x" path="res://resources/world_env.res" id="2_ayrpo"]
 
 [node name="World" type="Node3D"]
 
 [node name="PlayerCharacter" parent="." instance=ExtResource("1_0dk8b")]
+
+[node name="CaveMapFinalwColision" parent="." instance=ExtResource("2_8dq4i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.52316, -41.4129)
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
 use_collision = true
@@ -16,8 +20,7 @@ use_collision = true
 size = Vector3(10, 1, 10)
 
 [node name="SunLight" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.258819, 0.836516, -0.482963, 0, 0.5, 0.866025, 0.965926, -0.224144, 0.12941, 0, 0, 0)
-visible = false
+transform = Transform3D(0.258819, 0.836516, -0.482963, 0, 0.5, 0.866025, 0.965926, -0.224144, 0.12941, 0, 2.24823, 0)
 shadow_enabled = true
 shadow_reverse_cull_face = true
 directional_shadow_mode = 0
@@ -26,9 +29,7 @@ directional_shadow_pancake_size = 0.0
 sky_mode = 1
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-
-[node name="CaveMapTD2" parent="." instance=ExtResource("2_baacr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0289236, -7.1, -35.9909)
+environment = ExtResource("2_ayrpo")
 
 [node name="ClimbingWalls" type="Node3D" parent="."]
 
@@ -36,8 +37,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0289236, -7.1, -35.9909)
 use_collision = true
 collision_layer = 17
 collision_mask = 3
-
-[node name="CSGBox3D" type="CSGBox3D" parent="ClimbingWalls/CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.6, -8.2, -104.7)
-use_collision = true
-size = Vector3(8, 10, 2)
