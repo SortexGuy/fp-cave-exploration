@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://coq2iqn1v0an"]
+[gd_scene load_steps=19 format=3 uid="uid://coq2iqn1v0an"]
 
 [ext_resource type="PackedScene" uid="uid://bed8les37cpj3" path="res://src/character.tscn" id="1_0dk8b"]
 [ext_resource type="PackedScene" uid="uid://cm8gwnf1y21ws" path="res://resources/cave_map_finalw_colision.tscn" id="2_t762b"]
@@ -9,6 +9,7 @@
 [ext_resource type="Resource" uid="uid://di5an4a161t4e" path="res://resources/items/piolet.res" id="6_s46g5"]
 [ext_resource type="Resource" uid="uid://dokk10urrpewm" path="res://resources/items/harness.res" id="7_s7a2g"]
 [ext_resource type="Resource" uid="uid://dfnk370w3epn0" path="res://resources/items/camera.res" id="8_sr6uf"]
+[ext_resource type="PackedScene" uid="uid://dfhtx7st5g28s" path="res://src/gas_area.tscn" id="10_hhe8w"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5eal6"]
 
@@ -27,6 +28,16 @@ size = Vector3(3, 11, 3)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2mxe8"]
 size = Vector3(11, 8, 6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0vuys"]
+albedo_color = Color(0.15, 1, 0.305833, 1)
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_mgmlr"]
+size = Vector2(0.2, 0.2)
 
 [node name="World" type="Node3D"]
 
@@ -99,3 +110,37 @@ item = ExtResource("7_s7a2g")
 [node name="Object6" parent="Node3D" instance=ExtResource("3_cmgac")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 3.5)
 item = ExtResource("8_sr6uf")
+
+[node name="GasArea" parent="." instance=ExtResource("10_hhe8w")]
+
+[node name="CPUParticles3D2" type="CPUParticles3D" parent="GasArea"]
+material_override = SubResource("StandardMaterial3D_0vuys")
+amount = 128
+lifetime = 2.0
+preprocess = 1.0
+randomness = 0.5
+draw_order = 2
+mesh = SubResource("QuadMesh_mgmlr")
+emission_shape = 1
+emission_sphere_radius = 4.0
+direction = Vector3(0, 1, 0)
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.5
+initial_velocity_max = 2.0
+angular_velocity_min = -15.0
+angular_velocity_max = 15.0
+linear_accel_min = -5.0
+linear_accel_max = 5.0
+radial_accel_min = -5.0
+radial_accel_max = 5.0
+tangential_accel_min = -5.0
+tangential_accel_max = 5.0
+damping_min = 5.0
+damping_max = 25.0
+angle_min = -5.0
+angle_max = 5.0
+anim_speed_min = 1.0
+anim_speed_max = 2.0
+anim_offset_max = 0.5
+
+[editable path="GasArea"]
