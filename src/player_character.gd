@@ -30,6 +30,9 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var main_cam: Camera3D = %MainCamera
 @onready var flashlight: SpotLight3D = %Flashlight
 @onready var wall_climb_cast: ShapeCast3D = %WallClimbCast
+@onready var wall_grab_cast: ShapeCast3D = %WallGrabCast
+@onready var pickaxe_cast: ShapeCast3D = %PickaxeCast
+@onready var interaction_cast: ShapeCast3D = %InteractionCast
 
 @onready var high_body_collision: CollisionShape3D = %HighBodyCollision
 @onready var high_body: Area3D = %HighBody
@@ -38,11 +41,11 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var hud: HeadsUpDisplay = %HUD
 @onready var hurtboxes: Node3D = %HurtBoxes
 
-# Wall Grab Variable
-var wall_direction: Vector3 = Vector3.ZERO
+@onready var gas_timer: Timer = %GasTimer
+@onready var pickaxe_timer: Timer = %PickaxeTimer
 
-var wall_grab_toggle: bool = false
 var run_toggle: bool = false
+var wall_direction: Vector3 = Vector3.ZERO
 
 func _ready() -> void:
 	ModManager.mod_added.connect(mods_added)
@@ -63,9 +66,10 @@ func _physics_process(delta: float) -> void:
 		PLAYER_STATES.CLIMBING:
 			_climbing_state(delta)
 	
-	handle_modifiers(delta)
+	_handle_interaccion(delta)
 	if player_state != PLAYER_STATES.CLIMBING:
 		_movement_process(delta)
+		_handle_pickaxe(delta)
 	else:
 		_wall_movement(delta)
 
@@ -88,14 +92,18 @@ func _grounded_state(delta: float) -> void:
 		
 		previous_state = player_state
 		player_state = PLAYER_STATES.CROUCHING
-	elif Input.is_action_just_pressed("grab_wall") and wall_grab_toggle:
+	elif Input.is_action_just_pressed("grab_wall") and wall_climb_cast.enabled:
 		wall_climb_cast.force_shapecast_update()
 		if wall_climb_cast.is_colliding():
 			var res = wall_climb_cast.collision_result.front()
+			
 			wall_direction = -res.normal
+			var grab_xform: = wall_grab_cast.transform
+			wall_grab_cast.transform.basis = grab_xform.basis.looking_at(
+				grab_xform.origin + wall_direction)
 		
-		previous_state = player_state
-		player_state = PLAYER_STATES.CLIMBING
+			previous_state = player_state
+			player_state = PLAYER_STATES.CLIMBING
 
 func _midair_state(delta: float) -> void:
 	# Add the gravity.
@@ -120,7 +128,8 @@ func _crouching_state(delta: float) -> void:
 func _climbing_state(delta: float) -> void:
 	if (head_pivot.transform.basis * Vector3.FORWARD)\
 		.normalized().dot(wall_direction) < -0.4 or \
-		not Input.is_action_pressed("grab_wall"):
+		not Input.is_action_pressed("grab_wall") or \
+		not is_on_wall():
 		
 		previous_state = player_state
 		player_state = PLAYER_STATES.MIDAIR
@@ -146,19 +155,57 @@ func _movement_process(delta: float) -> void:
 	
 	move_and_slide()
 
+func _handle_pickaxe(delta: float) -> void:
+	if Input.is_action_pressed("use_pickaxe") and pickaxe_timer.is_stopped():
+		pickaxe_cast.force_shapecast_update()
+		if not pickaxe_cast.is_colliding(): return
+		pickaxe_timer.start()
+		var res = pickaxe_cast.collision_result.front() as Dictionary
+		var collider = res["collider"] as CollisionObject3D
+		collider.queue_free()
+
+func _handle_interaccion(delta: float) -> void:
+	if not Input.is_action_just_pressed("interaction_cast"): return
+	interaction_cast.force_shapecast_update()
+	if not interaction_cast.is_colliding(): return
+	var res = interaction_cast.collision_result.front() as Dictionary
+	printerr(res)
+	var collider = res["collider"] as ObjectItem
+	
+	var item: InventoryItem = collider.item
+	if inventory.has_modifier(item.modifier):
+		collider.selected = false
+		inventory.remove_item(item)
+		return
+	
+	collider.selected = true
+	inventory.add_item(item)
+
 func _wall_movement(delta: float) -> void:
-	var speed = WALK_SPEED * 0.7
+	wall_grab_cast.force_shapecast_update()
+	var wall_basis: Vector3 = wall_grab_cast.transform.basis * Vector3.FORWARD
+	var xform: Transform3D
+	if wall_grab_cast.is_colliding():
+		var res: Dictionary = wall_grab_cast.collision_result.front()
+		var point: Vector3 = res.point - (res.normal * 0.2)
+		xform = wall_grab_cast.transform.looking_at(point)
+		wall_grab_cast.transform = xform
+	else:
+		xform = wall_climb_cast.transform
+	
+	var speed = SLOW_SPEED
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-	var xform: Transform3D = head_pivot.transform.looking_at(transform.origin + wall_direction)
-	var direction = (xform.basis * Vector3(input_dir.x, -input_dir.y, 0)).normalized()
+	var direction = (xform.basis * Vector3(input_dir.x, -input_dir.y, -0.1)).normalized()
 	if direction:
-		velocity.x = direction.x * speed
-		velocity.y = direction.y * speed
+		velocity = direction * speed
+		#velocity.x = direction.x * speed
+		#velocity.y = direction.y * speed
 	else:
-		velocity.x = move_toward(velocity.x, 0, WALK_SPEED)
-		velocity.y = move_toward(velocity.y, 0, WALK_SPEED)
+		velocity.move_toward(Vector3.ZERO, WALK_SPEED)
+		#velocity.x = move_toward(velocity.x, 0, WALK_SPEED)
+		#velocity.y = move_toward(velocity.y, 0, WALK_SPEED)
 	
 	move_and_slide()
 
@@ -177,32 +224,30 @@ func _unhandled_input(event):
 		rel_vec = event.relative.y * mouse_sens
 		main_cam.rotate_x(-deg_to_rad(rel_vec))
 
-func handle_modifiers(delta: float) -> void:
-	var i: int = -1
-	for action in ["mod_1","mod_2","mod_3","mod_4","mod_5","mod_6"]:
-		i += 1
-		if Input.is_action_just_pressed(action):
-			var item: InventoryItem = InventoryItem.new()
-			var mods := ModManager.Modifiers.values()
-			item.modifier = mods[i]
-			if inventory.has_modifier(item.modifier):
-				inventory.remove_item(item)
-			else:
-				inventory.add_item(item)
-
 func mods_added(mod: ModManager.Modifiers) -> void:
 	match mod:
 		ModManager.Modifiers.FlashlightHelmet:
 			flashlight.show()
 		ModManager.Modifiers.Piolet:
-			wall_grab_toggle = true
+			wall_climb_cast.enabled = true
+		ModManager.Modifiers.Pickaxe:
+			pickaxe_cast.enabled = true
 
 func mods_removed(mod: ModManager.Modifiers) -> void:
 	match mod:
 		ModManager.Modifiers.FlashlightHelmet:
 			flashlight.hide()
 		ModManager.Modifiers.Piolet:
-			wall_grab_toggle = false
+			wall_climb_cast.enabled = false
+		ModManager.Modifiers.Pickaxe:
+			pickaxe_cast.enabled = false
 
 func _on_hurt_boxes_take_damage() -> void:
 	get_tree().reload_current_scene()
+
+func _on_hurtboxes_gas_entered() -> void:
+	if inventory.has_modifier(ModManager.Modifiers.GasMask): return
+	gas_timer.start()
+
+func _on_hurtboxes_gas_exited() -> void:
+	gas_timer.stop()

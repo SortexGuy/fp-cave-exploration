@@ -1,9 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://dfhtx7st5g28s"]
+[gd_scene load_steps=5 format=3 uid="uid://dfhtx7st5g28s"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ygunj"]
-size = Vector3(5, 5, 5)
+[ext_resource type="Script" path="res://src/gas_area.gd" id="1_jo7t5"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ank2d"]
+radius = 1.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0vuys"]
+albedo_color = Color(0.15, 1, 0.305833, 1)
 billboard_mode = 3
 particles_anim_h_frames = 1
 particles_anim_v_frames = 1
@@ -13,9 +16,12 @@ particles_anim_loop = false
 size = Vector2(0.2, 0.2)
 
 [node name="GasArea" type="Area3D"]
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("1_jo7t5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("BoxShape3D_ygunj")
+shape = SubResource("SphereShape3D_ank2d")
 
 [node name="CPUParticles3D" type="CPUParticles3D" parent="."]
 material_override = SubResource("StandardMaterial3D_0vuys")
@@ -25,8 +31,8 @@ preprocess = 1.0
 randomness = 0.5
 draw_order = 2
 mesh = SubResource("QuadMesh_mgmlr")
-emission_shape = 3
-emission_box_extents = Vector3(2.75, 2.75, 2.75)
+emission_shape = 1
+emission_sphere_radius = 4.0
 direction = Vector3(0, 1, 0)
 gravity = Vector3(0, 0, 0)
 initial_velocity_min = 0.5
@@ -46,3 +52,6 @@ angle_max = 5.0
 anim_speed_min = 1.0
 anim_speed_max = 2.0
 anim_offset_max = 0.5
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_area_exited"]

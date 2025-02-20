@@ -6,4 +6,6 @@ var player: Player :
 		player = p
 	get: 
 		return player
-signal take_damage(dmg: float)
+signal take_damage()
+signal gas_entered()
+signal gas_exited()

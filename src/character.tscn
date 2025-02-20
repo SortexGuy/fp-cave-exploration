@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bed8les37cpj3"]
+[gd_scene load_steps=14 format=3 uid="uid://bed8les37cpj3"]
 
 [ext_resource type="Script" path="res://src/player_character.gd" id="1_8qmik"]
 [ext_resource type="Resource" uid="uid://csctq2870tbi7" path="res://resources/player_inventory.res" id="2_73b0v"]
@@ -23,14 +23,25 @@ height = 1.2
 radius = 0.4
 height = 1.4
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_oe8yc"]
+radius = 0.3
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_qeyo8"]
+radius = 0.2
+
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_1c4t4"]
 height = 0.5
 radius = 0.2
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_b78km"]
+height = 0.5
+radius = 0.1
+
 [node name="PlayerCharacter" type="CharacterBody3D"]
 collision_layer = 2
 collision_mask = 5
-floor_constant_speed = true
+floor_block_on_wall = false
+floor_max_angle = 0.523599
 floor_snap_length = 0.2
 script = ExtResource("1_8qmik")
 inventory = ExtResource("2_73b0v")
@@ -48,13 +59,27 @@ shape = SubResource("CapsuleShape3D_0guc3")
 
 [node name="PlaceholderBodyMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
 mesh = SubResource("CapsuleMesh_bgugt")
+
+[node name="GasTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+process_callback = 0
+one_shot = true
+
+[node name="PickaxeTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+process_callback = 0
+one_shot = true
 
 [node name="HurtBoxes" type="Node3D" parent="."]
 unique_name_in_owner = true
+visible = false
 
 [node name="LowBody" type="Area3D" parent="HurtBoxes"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+collision_layer = 2
+collision_mask = 8
 monitoring = false
 script = ExtResource("2_jp1m0")
 
@@ -64,6 +89,8 @@ shape = SubResource("CapsuleShape3D_gsaiu")
 [node name="HighBody" type="Area3D" parent="HurtBoxes"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+collision_layer = 2
+collision_mask = 8
 monitoring = false
 script = ExtResource("2_jp1m0")
 
@@ -71,9 +98,24 @@ script = ExtResource("2_jp1m0")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
 shape = SubResource("CapsuleShape3D_y7ieu")
 
+[node name="WallGrabCast" type="ShapeCast3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+shape = SubResource("SphereShape3D_oe8yc")
+target_position = Vector3(0, 0, -1)
+collide_with_areas = true
+
 [node name="HeadPivot" type="Node3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+
+[node name="WallClimbCast" type="ShapeCast3D" parent="HeadPivot"]
+unique_name_in_owner = true
+enabled = false
+shape = SubResource("SphereShape3D_qeyo8")
+target_position = Vector3(0, 0, -0.5)
+collision_mask = 16
+collide_with_areas = true
 
 [node name="MainCamera" type="Camera3D" parent="HeadPivot"]
 unique_name_in_owner = true
@@ -83,16 +125,35 @@ current = true
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -0.3)
 visible = false
+light_energy = 2.0
 spot_range = 30.0
 spot_attenuation = 1.4
 spot_angle = 40.0
 spot_angle_attenuation = 3.0
 
-[node name="WallClimbCast" type="ShapeCast3D" parent="HeadPivot/MainCamera"]
+[node name="OmniLight3D" type="OmniLight3D" parent="HeadPivot/MainCamera/Flashlight"]
+omni_range = 20.0
+omni_attenuation = 2.0
+omni_shadow_mode = 0
+
+[node name="PickaxeCast" type="ShapeCast3D" parent="HeadPivot/MainCamera"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+enabled = false
 shape = SubResource("CylinderShape3D_1c4t4")
-collision_mask = 16
+collision_mask = 32
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="InteractionCast" type="ShapeCast3D" parent="HeadPivot/MainCamera"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CylinderShape3D_b78km")
+target_position = Vector3(0, -2, 0)
+collision_mask = 4
+collide_with_areas = true
+collide_with_bodies = false
+debug_shape_custom_color = Color(0.052, 0.52, 0.169, 1)
 
 [node name="HeadPositions" type="Node3D" parent="."]
 
@@ -153,5 +214,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 editor_only = false
 
+[connection signal="timeout" from="GasTimer" to="." method="_on_hurt_boxes_take_damage"]
+[connection signal="gas_entered" from="HurtBoxes/LowBody" to="." method="_on_hurtboxes_gas_entered"]
+[connection signal="gas_exited" from="HurtBoxes/LowBody" to="." method="_on_hurtboxes_gas_exited"]
 [connection signal="take_damage" from="HurtBoxes/LowBody" to="." method="_on_hurt_boxes_take_damage"]
+[connection signal="gas_entered" from="HurtBoxes/HighBody" to="." method="_on_hurtboxes_gas_entered"]
+[connection signal="gas_exited" from="HurtBoxes/HighBody" to="." method="_on_hurtboxes_gas_exited"]
 [connection signal="take_damage" from="HurtBoxes/HighBody" to="." method="_on_hurt_boxes_take_damage"]

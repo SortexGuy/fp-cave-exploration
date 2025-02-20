@@ -1,14 +1,38 @@
-[gd_scene load_steps=4 format=3 uid="uid://coq2iqn1v0an"]
+[gd_scene load_steps=16 format=3 uid="uid://coq2iqn1v0an"]
 
 [ext_resource type="PackedScene" uid="uid://bed8les37cpj3" path="res://src/character.tscn" id="1_0dk8b"]
-[ext_resource type="PackedScene" uid="uid://d0a6xe7db70cd" path="res://assets/CaveMapFinalwColision.glb" id="2_8dq4i"]
-[ext_resource type="Environment" uid="uid://txh7lljvhq1x" path="res://resources/world_env.res" id="2_ayrpo"]
+[ext_resource type="PackedScene" uid="uid://cm8gwnf1y21ws" path="res://resources/cave_map_finalw_colision.tscn" id="2_t762b"]
+[ext_resource type="PackedScene" uid="uid://c064kigcnjno2" path="res://src/object.tscn" id="3_cmgac"]
+[ext_resource type="PackedScene" uid="uid://dte72467i7q1d" path="res://src/objects/pickaxe.tscn" id="3_uri07"]
+[ext_resource type="Resource" uid="uid://mfqj4rsxt26i" path="res://resources/items/flashlight_helmet.res" id="4_n3mjo"]
+[ext_resource type="Resource" uid="uid://w0iod64qk48b" path="res://resources/items/gas_mask.res" id="5_lrjvb"]
+[ext_resource type="Resource" uid="uid://di5an4a161t4e" path="res://resources/items/piolet.res" id="6_s46g5"]
+[ext_resource type="Resource" uid="uid://dokk10urrpewm" path="res://resources/items/harness.res" id="7_s7a2g"]
+[ext_resource type="Resource" uid="uid://dfnk370w3epn0" path="res://resources/items/camera.res" id="8_sr6uf"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5eal6"]
+
+[sub_resource type="Sky" id="Sky_yoe0s"]
+sky_material = SubResource("ProceduralSkyMaterial_5eal6")
+
+[sub_resource type="Environment" id="Environment_ppy0g"]
+background_mode = 2
+sky = SubResource("Sky_yoe0s")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trh5i"]
+size = Vector3(15, 15, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wryvb"]
+size = Vector3(3, 11, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2mxe8"]
+size = Vector3(11, 8, 6)
 
 [node name="World" type="Node3D"]
 
 [node name="PlayerCharacter" parent="." instance=ExtResource("1_0dk8b")]
 
-[node name="CaveMapFinalwColision" parent="." instance=ExtResource("2_8dq4i")]
+[node name="CaveMapFinalwColision2" parent="." instance=ExtResource("2_t762b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.52316, -41.4129)
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
@@ -29,11 +53,49 @@ directional_shadow_pancake_size = 0.0
 sky_mode = 1
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource("2_ayrpo")
+environment = SubResource("Environment_ppy0g")
 
 [node name="ClimbingWalls" type="Node3D" parent="."]
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="ClimbingWalls"]
-use_collision = true
-collision_layer = 17
-collision_mask = 3
+[node name="ClimbAreas" type="Area3D" parent="ClimbingWalls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.928, -10, -133.849)
+collision_layer = 16
+collision_mask = 16
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ClimbingWalls/ClimbAreas"]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -0.731853, 0.5, 7.31764)
+shape = SubResource("BoxShape3D_trh5i")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="ClimbingWalls/ClimbAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 3, 7)
+shape = SubResource("BoxShape3D_wryvb")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="ClimbingWalls/ClimbAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -2.5, 10.5)
+shape = SubResource("BoxShape3D_2mxe8")
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="Pickaxe" parent="Node3D" instance=ExtResource("3_uri07")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -1.5)
+
+[node name="Object2" parent="Node3D" instance=ExtResource("3_cmgac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -0.5)
+item = ExtResource("4_n3mjo")
+
+[node name="Object3" parent="Node3D" instance=ExtResource("3_cmgac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 0.5)
+item = ExtResource("5_lrjvb")
+
+[node name="Object4" parent="Node3D" instance=ExtResource("3_cmgac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 1.5)
+item = ExtResource("6_s46g5")
+
+[node name="Object5" parent="Node3D" instance=ExtResource("3_cmgac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 2.5)
+item = ExtResource("7_s7a2g")
+
+[node name="Object6" parent="Node3D" instance=ExtResource("3_cmgac")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 3.5)
+item = ExtResource("8_sr6uf")

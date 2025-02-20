@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://dte72467i7q1d"]
+
+[ext_resource type="PackedScene" uid="uid://c064kigcnjno2" path="res://src/object.tscn" id="1_8jtfx"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_l5quu"]
+
+[node name="Pickaxe" instance=ExtResource("1_8jtfx")]
+
+[node name="MeshInstance3D" parent="." index="1"]
+mesh = SubResource("PrismMesh_l5quu")
