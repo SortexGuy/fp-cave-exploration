@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://dhrsjxxliuspm"]
+
+[ext_resource type="ArrayMesh" uid="uid://dg046kdsmtofx" path="res://assets/objetos/File/BetaMineralFile.res" id="1_xeafl"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wek4v"]
+size = Vector3(8.14746, 9.7959, 8.17798)
+
+[node name="Node3D" type="StaticBody3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1.55175e-08, -0.355, 0, 0.355, -1.55175e-08, 0, 0, 0, 0.355, 0, 0, 0)
+mesh = ExtResource("1_xeafl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-1.55175e-08, -0.355, 0, 0.355, -1.55175e-08, 0, 0, 0, 0.355, 1.1044, 0.874101, -0.706202)
+shape = SubResource("BoxShape3D_wek4v")

@@ -1,5 +1,5 @@
 [gd_scene load_steps=2 format=3 uid="uid://cm8gwnf1y21ws"]
 
-[ext_resource type="PackedScene" uid="uid://clil1hkmla1i5" path="res://assets/CaveMapFinalwColision.glb" id="1_c3bl6"]
+[ext_resource type="PackedScene" uid="uid://12yx5ythj2hd" path="res://assets/CaveMapFinal.glb" id="1_d7qbk"]
 
-[node name="CaveMapFinalwColision" instance=ExtResource("1_c3bl6")]
+[node name="CaveMapFinal" instance=ExtResource("1_d7qbk")]

@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://dh8wilqy2lg3u"]
+
+[ext_resource type="ArrayMesh" uid="uid://3lnwqkqficw0" path="res://assets/objetos/File/PiedraFile.res" id="1_qhwov"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_o74cb"]
+radius = 1.29409
+
+[node name="PiedraDestruible" type="StaticBody3D"]
+transform = Transform3D(0.505, 0, 0, 0, 0.505, 0, 0, 0, 0.505, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_qhwov")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_o74cb")

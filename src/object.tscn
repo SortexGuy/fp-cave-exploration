@@ -1,27 +1,27 @@
 [gd_scene load_steps=6 format=3 uid="uid://c064kigcnjno2"]
 
 [ext_resource type="Script" path="res://src/object.gd" id="1_q85os"]
-[ext_resource type="Resource" uid="uid://c8blvl2morrpc" path="res://resources/items/pickaxe.res" id="2_ejqk3"]
+[ext_resource type="Script" path="res://src/inv_item.gd" id="2_yr1ls"]
+[ext_resource type="ArrayMesh" uid="uid://grnsgm08y2jl" path="res://assets/objetos/File/GasMasakFile.res" id="3_i1ryl"]
+
+[sub_resource type="Resource" id="Resource_e1ox5"]
+script = ExtResource("2_yr1ls")
+modifier = 1
+name = "Item"
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c1ny1"]
 size = Vector3(1, 0.4, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6sjur"]
-cull_mode = 2
-
-[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_ox5cx"]
-material = SubResource("StandardMaterial3D_6sjur")
-sections = 2
-
-[node name="Object" type="Area3D"]
+[node name="flashlight" type="Area3D"]
 collision_layer = 4
 collision_mask = 2
 monitoring = false
 script = ExtResource("1_q85os")
-item = ExtResource("2_ejqk3")
+item = SubResource("Resource_e1ox5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_c1ny1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("RibbonTrailMesh_ox5cx")
+transform = Transform3D(1.5299e-08, 0.35, 4.5897e-08, 1.33748e-15, 4.5897e-08, -0.35, -0.35, 1.5299e-08, 6.6874e-16, -0.0430372, 0.0410655, 0.0367028)
+mesh = ExtResource("3_i1ryl")

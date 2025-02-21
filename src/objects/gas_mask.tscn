@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://cx1d4r8aehnjf"]
+
+[ext_resource type="PackedScene" uid="uid://c064kigcnjno2" path="res://src/object.tscn" id="1_s1lc0"]
+[ext_resource type="Resource" uid="uid://w0iod64qk48b" path="res://resources/items/gas_mask.res" id="2_32pp7"]
+
+[node name="GasMask" instance=ExtResource("1_s1lc0")]
+item = ExtResource("2_32pp7")

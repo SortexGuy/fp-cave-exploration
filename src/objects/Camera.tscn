@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://bxapj3qp15ikq"]
+
+[ext_resource type="PackedScene" uid="uid://c064kigcnjno2" path="res://src/object.tscn" id="1_564vq"]
+[ext_resource type="ArrayMesh" uid="uid://csrhu85b7asq1" path="res://assets/objetos/File/CameraFile.res" id="2_hv7h7"]
+[ext_resource type="Resource" uid="uid://dfnk370w3epn0" path="res://resources/items/camera.res" id="2_khpms"]
+
+[node name="Camera" instance=ExtResource("1_564vq")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+item = ExtResource("2_khpms")
+
+[node name="MeshInstance3D" parent="." index="1"]
+transform = Transform3D(-0.35, 1.5299e-08, -1.5299e-08, 1.5299e-08, 0.35, 6.1196e-08, 1.5299e-08, 6.1196e-08, -0.35, 0.20763, 0.388177, 0.0219864)
+mesh = ExtResource("2_hv7h7")

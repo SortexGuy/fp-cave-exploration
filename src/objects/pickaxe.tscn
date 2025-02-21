@@ -1,10 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://dte72467i7q1d"]
+[gd_scene load_steps=5 format=3 uid="uid://dte72467i7q1d"]
 
 [ext_resource type="PackedScene" uid="uid://c064kigcnjno2" path="res://src/object.tscn" id="1_8jtfx"]
+[ext_resource type="ArrayMesh" uid="uid://c3g04lv8nf4o2" path="res://assets/objetos/File/PicoFile.res" id="2_te35i"]
+[ext_resource type="Resource" uid="uid://c8blvl2morrpc" path="res://resources/items/pickaxe.res" id="2_v7xt7"]
 
-[sub_resource type="PrismMesh" id="PrismMesh_l5quu"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_c1ny1"]
+size = Vector3(1.07813, 0.4, 1)
 
 [node name="Pickaxe" instance=ExtResource("1_8jtfx")]
+item = ExtResource("2_v7xt7")
+
+[node name="CollisionShape3D" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0390625, 0, 0)
+shape = SubResource("BoxShape3D_c1ny1")
 
 [node name="MeshInstance3D" parent="." index="1"]
-mesh = SubResource("PrismMesh_l5quu")
+transform = Transform3D(0.512303, 0.349207, 1.52643e-08, 0, -2.71011e-08, 0.62, 0.349207, -0.512303, -2.23935e-08, -0.201268, 0, 0.134452)
+mesh = ExtResource("2_te35i")
