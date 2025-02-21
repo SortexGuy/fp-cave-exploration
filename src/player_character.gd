@@ -17,7 +17,7 @@ const JUMP_VELOCITY = 3.0 * MASS
 @export var inventory: Inventory
 
 @export_range(0.0, 10.0, 0.1) var WALK_SPEED = 5.0
-@onready var RUN_SPEED = WALK_SPEED * 1.9
+@onready var RUN_SPEED = WALK_SPEED * 2.2
 @onready var SLOW_SPEED = WALK_SPEED * 0.7
 
 @export_range(0.00001, 0.1, 0.00001)
@@ -33,6 +33,7 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var wall_grab_cast: ShapeCast3D = %WallGrabCast
 @onready var pickaxe_cast: ShapeCast3D = %PickaxeCast
 @onready var interaction_cast: ShapeCast3D = %InteractionCast
+@onready var anti_clip_cast: ShapeCast3D = %AntiClipCast
 
 @onready var high_body_collision: CollisionShape3D = %HighBodyCollision
 @onready var high_body: Area3D = %HighBody
@@ -101,6 +102,7 @@ func _grounded_state(delta: float) -> void:
 			var grab_xform: = wall_grab_cast.transform
 			wall_grab_cast.transform.basis = grab_xform.basis.looking_at(
 				grab_xform.origin + wall_direction)
+			velocity = Vector3.ZERO
 		
 			previous_state = player_state
 			player_state = PLAYER_STATES.CLIMBING
@@ -116,7 +118,8 @@ func _crouching_state(delta: float) -> void:
 	if not is_on_floor():
 		previous_state = player_state
 		player_state = PLAYER_STATES.MIDAIR
-	elif Input.is_action_just_pressed("crouch_toggle"):
+	elif Input.is_action_just_pressed("crouch_toggle") and \
+		not anti_clip_cast.is_colliding():
 		previous_state = player_state
 		player_state = PLAYER_STATES.GROUNDED
 	
@@ -160,22 +163,24 @@ func _handle_pickaxe(delta: float) -> void:
 		pickaxe_cast.force_shapecast_update()
 		if not pickaxe_cast.is_colliding(): return
 		pickaxe_timer.start()
-		var res = pickaxe_cast.collision_result.front() as Dictionary
-		var collider = res["collider"] as CollisionObject3D
-		collider.queue_free()
+		var res := pickaxe_cast.collision_result.front() as Dictionary
+		var collider := res.collider as DestructibleStone
+		collider.destroy()
 
 func _handle_interaccion(delta: float) -> void:
 	if not Input.is_action_just_pressed("interaction_cast"): return
 	interaction_cast.force_shapecast_update()
 	if not interaction_cast.is_colliding(): return
-	var res = interaction_cast.collision_result.front() as Dictionary
-	printerr(res)
-	var collider = res["collider"] as ObjectItem
+	var res := interaction_cast.collision_result.front() as Dictionary
+	var collider := res.collider as ObjectItem
 	
 	var item: InventoryItem = collider.item
 	if inventory.has_modifier(item.modifier):
 		collider.selected = false
 		inventory.remove_item(item)
+		return
+	elif inventory.is_full():
+		# Mostrar que no puedes hacer nada
 		return
 	
 	collider.selected = true
@@ -187,7 +192,7 @@ func _wall_movement(delta: float) -> void:
 	var xform: Transform3D
 	if wall_grab_cast.is_colliding():
 		var res: Dictionary = wall_grab_cast.collision_result.front()
-		var point: Vector3 = res.point - (res.normal * 0.2)
+		var point: Vector3 = res.point - (res.normal * 0.5)
 		xform = wall_grab_cast.transform.looking_at(point)
 		wall_grab_cast.transform = xform
 	else:
@@ -197,13 +202,13 @@ func _wall_movement(delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-	var direction = (xform.basis * Vector3(input_dir.x, -input_dir.y, -0.1)).normalized()
-	if direction:
+	var direction = (xform.basis * Vector3(input_dir.x, -input_dir.y, -0.5)).normalized()
+	if input_dir:
 		velocity = direction * speed
 		#velocity.x = direction.x * speed
 		#velocity.y = direction.y * speed
 	else:
-		velocity.move_toward(Vector3.ZERO, WALK_SPEED)
+		velocity = Vector3.ZERO
 		#velocity.x = move_toward(velocity.x, 0, WALK_SPEED)
 		#velocity.y = move_toward(velocity.y, 0, WALK_SPEED)
 	

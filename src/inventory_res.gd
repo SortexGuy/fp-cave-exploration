@@ -10,7 +10,7 @@ func add_item(item: InventoryItem) -> bool:
 	for _item in items:
 		if _item.modifier == item.modifier:
 			return true
-	if items.size() >= max_items:
+	if is_full():
 		return true
 	items.append(item)
 	ModManager.mod_added.emit(item.modifier)
@@ -28,3 +28,8 @@ func remove_item(item: InventoryItem) -> void:
 		if _item.modifier == item.modifier:
 			items.erase(_item)
 	ModManager.mod_removed.emit(item.modifier)
+
+func is_full() -> bool:
+	if items.size() >= max_items:
+		return true
+	return false

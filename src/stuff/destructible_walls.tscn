@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://c3fb2ev7b7y2e"]
+
+[ext_resource type="PackedScene" uid="uid://dh8wilqy2lg3u" path="res://src/piedra_destruible.tscn" id="1_6txqy"]
+
+[node name="DestructibleWall" type="Node3D"]
+
+[node name="PiedraDestruible" parent="." instance=ExtResource("1_6txqy")]
+transform = Transform3D(0.680274, 0.226757, -0.376708, -0.312853, 0.737251, -0.121179, 0.308951, 0.247271, 0.706757, -1.34327, -0.944401, -0.0104422)
+
+[node name="PiedraDestruible2" parent="." instance=ExtResource("1_6txqy")]
+transform = Transform3D(-0.803827, -0.0220859, -0.0973336, -0.0786511, 0.626475, 0.507389, 0.0614456, 0.512973, -0.623845, 0.646655, -1.3591, -0.137292)
+
+[node name="PiedraDestruible3" parent="." instance=ExtResource("1_6txqy")]
+transform = Transform3D(-0.619727, 0.280872, -0.439488, 0.188784, 0.757038, 0.217608, 0.486209, 0.0640606, -0.644669, -0.151402, -0.0110006, -0.137663)
+
+[node name="PiedraDestruible4" parent="." instance=ExtResource("1_6txqy")]
+transform = Transform3D(0.691322, -0.131297, -0.401167, 0.0701495, 0.79485, -0.139258, 0.416237, 0.0841117, 0.689763, 1.76676, -0.0110006, -0.027785)
+
+[node name="PiedraDestruible5" parent="." instance=ExtResource("1_6txqy")]
+transform = Transform3D(0.0936656, -0.709615, 0.379175, 0.800535, 0.120364, 0.0275045, -0.0804401, 0.371563, 0.715241, -1.47415, 0.993899, 0.0863562)
+
+[node name="PiedraDestruible6" parent="." instance=ExtResource("1_6txqy")]
+transform = Transform3D(-0.386827, 0.167407, 0.691693, 0.633154, 0.440409, 0.247499, -0.324932, 0.658873, -0.341181, 0.571904, 1.2486, 0.244717)

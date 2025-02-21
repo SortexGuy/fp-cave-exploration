@@ -1,6 +1,7 @@
-[gd_scene load_steps=20 format=3 uid="uid://coq2iqn1v0an"]
+[gd_scene load_steps=21 format=3 uid="uid://coq2iqn1v0an"]
 
 [ext_resource type="PackedScene" uid="uid://bed8les37cpj3" path="res://src/character.tscn" id="1_0dk8b"]
+[ext_resource type="Script" path="res://src/world.gd" id="1_di5p2"]
 [ext_resource type="PackedScene" uid="uid://cm8gwnf1y21ws" path="res://resources/cave_map_finalw_colision.tscn" id="2_t762b"]
 [ext_resource type="PackedScene" uid="uid://dte72467i7q1d" path="res://src/objects/pickaxe.tscn" id="3_uri07"]
 [ext_resource type="PackedScene" uid="uid://dj0w1jrfgwtyo" path="res://src/objects/casco_linterna.tscn" id="5_21r5d"]
@@ -8,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://cynf1qrq11dw7" path="res://src/objects/piolets.tscn" id="9_3kowi"]
 [ext_resource type="PackedScene" uid="uid://dh8wilqy2lg3u" path="res://src/piedra_destruible.tscn" id="9_35ns0"]
 [ext_resource type="PackedScene" uid="uid://dfhtx7st5g28s" path="res://src/gas_area.tscn" id="10_hhe8w"]
+[ext_resource type="PackedScene" uid="uid://c3fb2ev7b7y2e" path="res://src/stuff/destructible_walls.tscn" id="11_1x2e3"]
 [ext_resource type="PackedScene" uid="uid://dsufdw26brcjx" path="res://assets/objetos/BetaMineral.glb" id="11_phv5p"]
 [ext_resource type="PackedScene" uid="uid://bxapj3qp15ikq" path="res://src/objects/Camera.tscn" id="12_lgmur"]
 [ext_resource type="PackedScene" uid="uid://cqcp2vdvx05rf" path="res://src/objects/harness.tscn" id="13_473k2"]
@@ -22,13 +24,10 @@ background_mode = 2
 sky = SubResource("Sky_yoe0s")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_trh5i"]
-size = Vector3(15, 15, 1)
+size = Vector3(11, 16, 4)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wryvb"]
-size = Vector3(3, 11, 3)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_2mxe8"]
-size = Vector3(11, 8, 6)
+size = Vector3(3, 15.6, 4)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0vuys"]
 albedo_color = Color(0.15, 1, 0.305833, 1)
@@ -41,8 +40,10 @@ particles_anim_loop = false
 size = Vector2(0.2, 0.2)
 
 [node name="World" type="Node3D"]
+script = ExtResource("1_di5p2")
 
 [node name="PlayerCharacter" parent="." instance=ExtResource("1_0dk8b")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2, 0, 1)
 
 [node name="CaveMapFinal" parent="." instance=ExtResource("2_t762b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.10044, -9.44371, -41.4653)
@@ -76,120 +77,32 @@ collision_mask = 16
 monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ClimbingWalls/ClimbAreas"]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -0.731853, 0.5, 7.31764)
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -0.992325, 1, 5.34042)
 shape = SubResource("BoxShape3D_trh5i")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="ClimbingWalls/ClimbAreas"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 3, 7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1.1, 6.8)
 shape = SubResource("BoxShape3D_wryvb")
 
-[node name="CollisionShape3D3" type="CollisionShape3D" parent="ClimbingWalls/ClimbAreas"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -2.5, 10.5)
-shape = SubResource("BoxShape3D_2mxe8")
+[node name="Interactables" type="Node3D" parent="."]
 
-[node name="ObjetosUsables" type="Node3D" parent="."]
-
-[node name="Pickaxe" parent="ObjetosUsables" instance=ExtResource("3_uri07")]
+[node name="Pickaxe" parent="Interactables" instance=ExtResource("3_uri07")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -1.5)
 
-[node name="CascoLinterna" parent="ObjetosUsables" instance=ExtResource("5_21r5d")]
+[node name="CascoLinterna" parent="Interactables" instance=ExtResource("5_21r5d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.43428, 0, -0.519171)
 
-[node name="GasMask" parent="ObjetosUsables" instance=ExtResource("7_0ki56")]
+[node name="GasMask" parent="Interactables" instance=ExtResource("7_0ki56")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 0.5)
 
-[node name="Piolets" parent="ObjetosUsables" instance=ExtResource("9_3kowi")]
+[node name="Piolets" parent="Interactables" instance=ExtResource("9_3kowi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 1.5)
 
-[node name="Harness" parent="ObjetosUsables" instance=ExtResource("13_473k2")]
+[node name="Harness" parent="Interactables" instance=ExtResource("13_473k2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 2.5)
 
-[node name="Camera" parent="ObjetosUsables" instance=ExtResource("12_lgmur")]
+[node name="Camera" parent="Interactables" instance=ExtResource("12_lgmur")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.50209, -0.00254488, 3.51323)
-
-[node name="PiedrasDestruibles1" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 84.7942, -21.2546, -166.596)
-
-[node name="PiedraDestruible" parent="PiedrasDestruibles1" instance=ExtResource("9_35ns0")]
-transform = Transform3D(0.533581, 0.12851, -0.595715, -0.312853, 0.737251, -0.12118, 0.522986, 0.309914, 0.535293, -89.0475, 11.6556, 90.12)
-
-[node name="PiedraDestruible2" parent="PiedrasDestruibles1" instance=ExtResource("9_35ns0")]
-transform = Transform3D(-0.776366, -0.196201, 0.121904, -0.0786511, 0.626475, 0.507389, -0.217185, 0.474483, -0.619513, -87.1342, 11.2409, 90.6814)
-
-[node name="PiedraDestruible3" parent="PiedrasDestruibles1" instance=ExtResource("9_35ns0")]
-transform = Transform3D(-0.748646, 0.242023, -0.192494, 0.188784, 0.757038, 0.217608, 0.244928, 0.156261, -0.756104, -87.884, 12.589, 90.4081)
-
-[node name="PiedraDestruible4" parent="PiedrasDestruibles1" instance=ExtResource("9_35ns0")]
-transform = Transform3D(0.507269, -0.152147, -0.612886, 0.0701495, 0.79485, -0.139258, 0.627581, 0.0341328, 0.510958, -86.1191, 12.589, 91.1674)
-
-[node name="PiedraDestruible5" parent="PiedrasDestruibles1" instance=ExtResource("9_35ns0")]
-transform = Transform3D(0.115529, -0.793902, 0.111681, 0.800535, 0.120364, 0.0275045, -0.0435535, 0.106453, 0.801792, -89.2036, 13.5939, 90.1662)
-
-[node name="PiedraDestruible6" parent="PiedrasDestruibles1" instance=ExtResource("9_35ns0")]
-transform = Transform3D(-0.252365, -0.0680366, 0.76667, 0.633154, 0.440409, 0.247499, -0.437639, 0.676395, -0.0840327, -87.3351, 13.8486, 91.0148)
-
-[node name="PiedrasDestruibles2" type="Node3D" parent="."]
-transform = Transform3D(0.994153, 0, 0.107982, 0, 1, 0, -0.107982, 0, 0.994153, 84.0674, -21.3074, -199.873)
-
-[node name="PiedraDestruible" parent="PiedrasDestruibles2" instance=ExtResource("9_35ns0")]
-transform = Transform3D(0.533581, 0.12851, -0.595715, -0.312853, 0.737251, -0.12118, 0.522986, 0.309914, 0.535293, -89.0475, 11.6556, 90.12)
-
-[node name="PiedraDestruible2" parent="PiedrasDestruibles2" instance=ExtResource("9_35ns0")]
-transform = Transform3D(-0.776366, -0.196201, 0.121904, -0.0786511, 0.626475, 0.507389, -0.217185, 0.474483, -0.619513, -87.1342, 11.2409, 90.6814)
-
-[node name="PiedraDestruible3" parent="PiedrasDestruibles2" instance=ExtResource("9_35ns0")]
-transform = Transform3D(-0.748646, 0.242023, -0.192494, 0.188784, 0.757038, 0.217608, 0.244928, 0.156261, -0.756104, -87.884, 12.589, 90.4081)
-
-[node name="PiedraDestruible4" parent="PiedrasDestruibles2" instance=ExtResource("9_35ns0")]
-transform = Transform3D(0.507269, -0.152147, -0.612886, 0.0701495, 0.79485, -0.139258, 0.627581, 0.0341328, 0.510958, -86.1191, 12.589, 91.1674)
-
-[node name="PiedraDestruible5" parent="PiedrasDestruibles2" instance=ExtResource("9_35ns0")]
-transform = Transform3D(0.115529, -0.793902, 0.111681, 0.800535, 0.120364, 0.0275045, -0.0435535, 0.106453, 0.801792, -89.2036, 13.5939, 90.1662)
-
-[node name="PiedraDestruible6" parent="PiedrasDestruibles2" instance=ExtResource("9_35ns0")]
-transform = Transform3D(-0.252365, -0.0680366, 0.76667, 0.633154, 0.440409, 0.247499, -0.437639, 0.676395, -0.0840327, -87.3351, 13.8486, 91.0148)
-
-[node name="PiedrasDestruibles3" type="Node3D" parent="."]
-transform = Transform3D(1.52324, 0, 0.419685, 0, 1.58, 0, -0.419685, 0, 1.52324, 141.759, -46.3826, -348.863)
-
-[node name="PiedraDestruible" parent="PiedrasDestruibles3" instance=ExtResource("9_35ns0")]
-transform = Transform3D(0.533581, 0.12851, -0.595715, -0.312853, 0.737251, -0.12118, 0.522986, 0.309914, 0.535293, -89.0475, 11.6556, 90.12)
-
-[node name="PiedraDestruible2" parent="PiedrasDestruibles3" instance=ExtResource("9_35ns0")]
-transform = Transform3D(-0.776366, -0.196201, 0.121904, -0.0786511, 0.626475, 0.507389, -0.217185, 0.474483, -0.619513, -87.1342, 11.2409, 90.6814)
-
-[node name="PiedraDestruible3" parent="PiedrasDestruibles3" instance=ExtResource("9_35ns0")]
-transform = Transform3D(-0.748646, 0.242023, -0.192494, 0.188784, 0.757038, 0.217608, 0.244928, 0.156261, -0.756104, -87.884, 12.589, 90.4081)
-
-[node name="PiedraDestruible4" parent="PiedrasDestruibles3" instance=ExtResource("9_35ns0")]
-transform = Transform3D(0.507269, -0.152147, -0.612886, 0.0701495, 0.79485, -0.139258, 0.627581, 0.0341328, 0.510958, -86.1191, 12.589, 91.1674)
-
-[node name="PiedraDestruible5" parent="PiedrasDestruibles3" instance=ExtResource("9_35ns0")]
-transform = Transform3D(0.115529, -0.793902, 0.111681, 0.800535, 0.120364, 0.0275045, -0.0435535, 0.106453, 0.801792, -89.2036, 13.5939, 90.1662)
-
-[node name="PiedraDestruible6" parent="PiedrasDestruibles3" instance=ExtResource("9_35ns0")]
-transform = Transform3D(-0.252365, -0.0680366, 0.76667, 0.633154, 0.440409, 0.247499, -0.437639, 0.676395, -0.0840327, -87.3351, 13.8486, 91.0148)
-
-[node name="PiedrasDestruibles4" type="Node3D" parent="."]
-transform = Transform3D(0.115492, 0, 0.993308, 0, 1, 0, -0.993308, 0, 0.115492, -117.66, -34.9104, -288.47)
-
-[node name="PiedraDestruible" parent="PiedrasDestruibles4" instance=ExtResource("9_35ns0")]
-transform = Transform3D(0.533581, 0.12851, -0.595715, -0.312853, 0.737251, -0.12118, 0.522986, 0.309914, 0.535293, -89.0475, 11.6556, 90.12)
-
-[node name="PiedraDestruible2" parent="PiedrasDestruibles4" instance=ExtResource("9_35ns0")]
-transform = Transform3D(-0.776366, -0.196201, 0.121904, -0.0786511, 0.626475, 0.507389, -0.217185, 0.474483, -0.619513, -87.1342, 11.2409, 90.6814)
-
-[node name="PiedraDestruible3" parent="PiedrasDestruibles4" instance=ExtResource("9_35ns0")]
-transform = Transform3D(-0.748646, 0.242023, -0.192494, 0.188784, 0.757038, 0.217608, 0.244928, 0.156261, -0.756104, -87.884, 12.589, 90.4081)
-
-[node name="PiedraDestruible4" parent="PiedrasDestruibles4" instance=ExtResource("9_35ns0")]
-transform = Transform3D(0.507269, -0.152147, -0.612886, 0.0701495, 0.79485, -0.139258, 0.627581, 0.0341328, 0.510958, -86.1191, 12.589, 91.1674)
-
-[node name="PiedraDestruible5" parent="PiedrasDestruibles4" instance=ExtResource("9_35ns0")]
-transform = Transform3D(0.115529, -0.793902, 0.111681, 0.800535, 0.120364, 0.0275045, -0.0435535, 0.106453, 0.801792, -89.2036, 13.5939, 90.1662)
-
-[node name="PiedraDestruible6" parent="PiedrasDestruibles4" instance=ExtResource("9_35ns0")]
-transform = Transform3D(-0.252365, -0.0680366, 0.76667, 0.633154, 0.440409, 0.247499, -0.437639, 0.676395, -0.0840327, -87.3351, 13.8486, 91.0148)
 
 [node name="AreasDeGases" type="Node3D" parent="."]
 
@@ -424,126 +337,183 @@ anim_speed_min = 1.0
 anim_speed_max = 2.0
 anim_offset_max = 0.5
 
-[node name="BetaMineral" type="Node3D" parent="."]
+[node name="VetaMineral" type="Node3D" parent="."]
 transform = Transform3D(0.115492, 0, 0.993308, 0, 1, 0, -0.993308, 0, 0.115492, -24.5305, 10.7803, -343.749)
 
-[node name="BetaMineral" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(5.16, 0, 3.57628e-07, 0, 5.16, 0, -3.57628e-07, 0, 5.16, 3.98834, -10.1563, -23.2645)
 
-[node name="BetaMineral2" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral2" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(-0.553128, -3.6477, 0.435375, 3.67204, -0.561806, -0.0417871, 0.10687, 0.424118, 3.68916, 8.375, -9.88962, 11.4436)
 
-[node name="BetaMineral3" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral3" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(-0.433289, 0.248729, -2.19896, -2.12611, -0.668438, 0.343326, -0.613957, 2.13924, 0.36295, 13.312, -9.88962, -8.43147)
 
-[node name="BetaMineral8" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral8" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(-0.433289, 0.248729, -2.19896, -2.12611, -0.668438, 0.343326, -0.613957, 2.13924, 0.36295, 16.0583, -9.38028, -3.61678)
 
-[node name="BetaMineral4" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral4" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(-0.282263, -0.244435, -2.22387, -2.12611, -0.668438, 0.343326, -0.696426, 2.13974, -0.146794, 14.1124, -11.6559, -1.5475)
 
-[node name="BetaMineral5" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral5" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(0.733436, 0.904146, 1.93122, 1.9707, 0.492694, -0.979095, -0.814522, 2.00619, -0.629907, 11.3061, -13.1455, -4.80727)
 
-[node name="BetaMineral10" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral10" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(0.849013, -0.138936, -2.08444, 0.766936, -2.07217, 0.450499, -1.9432, -0.878542, -0.732924, 15.6558, -3.90098, -13.367)
 
-[node name="BetaMineral11" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral11" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(0.849013, -0.138936, -2.08444, 0.766936, -2.07217, 0.450499, -1.9432, -0.878542, -0.732924, 16.1793, -9.39112, -12.6142)
 
-[node name="BetaMineral16" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral16" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(1.6645, -0.0641162, -1.51999, 1.46633, 0.667979, 1.57756, 0.405397, -2.15284, 0.534752, 14.8438, -2.35998, 1.225)
 
-[node name="BetaMineral17" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral17" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(1.6645, -0.0641162, -1.51999, 1.46633, 0.667979, 1.57756, 0.405397, -2.15284, 0.534752, 14.2284, -3.74689, -4.13048)
 
-[node name="BetaMineral18" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral18" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(0.482744, 1.8617, -1.17731, -1.53424, 1.149, 1.18784, 1.58054, 0.546718, 1.51262, 12.9731, -8.80375, 5.77428)
 
-[node name="BetaMineral19" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral19" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(0.482744, 1.8617, -1.17731, -1.53424, 1.149, 1.18784, 1.58054, 0.546718, 1.51262, 17.3261, -5.78287, 4.06885)
 
-[node name="BetaMineral12" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral12" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(0.998739, -0.544596, -1.94704, 0.789216, -1.89434, 0.934685, -1.86137, -1.09541, -0.648403, 15.0248, -10.576, -15.8562)
 
-[node name="BetaMineral13" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral13" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(-0.0855605, -0.113196, 2.25053, 0.458948, -2.20582, -0.0934984, 2.20614, 0.45449, 0.106733, 14.4384, -6.49611, -17.7877)
 
-[node name="BetaMineral6" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral6" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(5.16, 0, 3.57628e-07, 0, 5.16, 0, -3.57628e-07, 0, 5.16, -7.96207, -10.1563, -22.6176)
 
-[node name="BetaMineral7" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral7" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(-0.414877, -4.65027, -2.19739, -5.14296, 0.400236, 0.124005, 0.0586835, 2.2001, -4.66709, 3.42551, -9.70113, 20.2701)
 
-[node name="BetaMineral9" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral9" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(-0.00800701, -1.62073, 4.89886, -5.14296, 0.400236, 0.124005, -0.418931, -4.88248, -1.616, 10.1609, -1.98611, 20.3312)
 
-[node name="BetaMineral14" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral14" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(4.80989, -1.0107, 1.57132, 0.325361, 4.72659, 2.04427, -1.83975, -1.80649, 4.46962, -12.8144, 1.50261, -21.4736)
 
-[node name="BetaMineral15" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral15" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(4.96484, 1.37133, 0.309054, -0.0969612, 1.46582, -4.94648, -1.40237, 4.75357, 1.43614, -20.2534, -5.0894, -19.0045)
 
-[node name="BetaMineral20" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral20" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(3.8495, 1.35694, -2.80308, 1.2926, -3.75657, -1.08078, -4.18136, 0.0879649, -2.91471, 11.9503, 32.8843, 10.4816)
 
-[node name="BetaMineral21" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral21" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(0.552519, -3.48928, -2.46248, -2.4567, -0.472082, -0.915325, 0.274942, 2.79377, -3.23018, -11.4047, 25.9282, -15.4587)
 
-[node name="BetaMineral22" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral22" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(-0.417264, -1.89447, -1.61012, 1.44055, 0.16639, -0.922171, 0.483215, -2.13195, 1.3588, 7.59454, 31.0404, -5.52954)
 
-[node name="BetaMineral23" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral23" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(-0.417264, -1.89447, -1.61012, 1.44055, 0.16639, -0.922171, 0.483215, -2.13195, 1.3588, 6.12378, 30.1089, -10.5379)
 
-[node name="BetaMineral24" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral24" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(-0.340738, -1.7893, -1.44606, 1.63085, 0.0214539, -0.897399, 0.493651, -1.30592, 1.96656, 2.25317, 30.8824, -10.6436)
 
-[node name="BetaMineral25" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral25" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(1.48526, -0.500935, 1.67452, -1.29372, -0.675507, 1.85467, 0.0737897, -1.76043, -1.18816, 2.12778, 32.1325, -6.63591)
 
-[node name="BetaMineral26" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral26" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(2.49244, -0.169439, -0.629409, -0.0365528, 1.75327, -0.598307, 0.89356, 0.544344, 1.73116, 15.3108, 28.4351, -3.75352)
 
-[node name="BetaMineral27" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral27" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(2.49244, -0.169439, -0.629409, -0.0365528, 1.75327, -0.598307, 0.89356, 0.544344, 1.73116, 13.14, 32.0808, -4.64503)
 
-[node name="BetaMineral28" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral28" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(1.00982, 2.06531, -0.610449, -0.848698, -0.109791, -1.44717, -1.09985, 1.98096, 0.556233, 4.02161, 24.1025, -12.8907)
 
-[node name="BetaMineral29" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral29" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(1.00982, 2.06531, -0.610449, -0.848698, -0.109791, -1.44717, -1.09985, 1.98096, 0.556233, 7.18539, 26.0983, -8.93991)
 
-[node name="BetaMineral30" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral30" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(-1.40946, 0.932806, -1.4058, 1.27628, -0.601709, -1.79248, -1.65538, -1.25815, -0.185026, -3.20773, 27.178, -14.7271)
 
-[node name="BetaMineral31" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral31" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(-1.40946, 0.932806, -1.4058, 1.27628, -0.601709, -1.79248, -1.65538, -1.25815, -0.185026, 2.45154, 26.2189, -16.4489)
 
-[node name="BetaMineral32" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral32" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(2.56898, -0.218898, -0.481514, -0.0472649, 1.5782, -1.03043, 0.705458, 0.902871, 1.68444, 14.3459, 33.3936, -1.73909)
 
-[node name="BetaMineral33" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral33" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(-1.41984, -1.27801, 1.0799, -1.05112, 2.18792, 0.436801, -1.5092, -0.321494, -1.32018, 16.8682, 30.9483, -0.03508)
 
-[node name="BetaMineral34" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral34" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(3.8495, 1.35694, -2.80308, 1.2926, -3.75657, -1.08078, -4.18136, 0.087965, -2.91471, 2.51572, 30.7675, 17.9558)
 
-[node name="BetaMineral35" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral35" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(-1.62122, -5.17062, 1.5599, 3.72131, -2.31716, 0.546376, 0.112946, 2.12614, 4.38903, -21.8357, 23.074, -18.0433)
 
-[node name="BetaMineral36" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral36" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(-0.975292, 2.54836, 5.26115, 3.27555, 0.572821, 1.67384, 0.122095, 4.98867, -2.87974, -14.0607, 18.945, -22.4745)
 
-[node name="BetaMineral37" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral37" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(5.15541, 1.69371, -1.03711, 1.40974, -3.31394, -2.24341, -2.46669, 1.64593, -3.44971, 2.21613, 21.8138, 20.5022)
 
-[node name="BetaMineral38" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral38" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(5.14129, -1.46312, -2.16363, 1.90938, -1.8921, 3.85992, -3.17835, -3.50341, -1.18105, -7.62869, 24.5183, 23.7283)
 
-[node name="BetaMineral39" parent="BetaMineral" instance=ExtResource("11_phv5p")]
+[node name="BetaMineral39" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(-0.54115, -4.01668, 6.44869, 7.52848, -1.15183, -0.0856726, 1.02039, 6.36802, 4.05206, 21.6392, 13.1953, -8.72864)
 
+[node name="DestructibleWalls" type="Node3D" parent="."]
+
+[node name="DestructibleWall2" parent="DestructibleWalls" instance=ExtResource("11_1x2e3")]
+transform = Transform3D(0.819152, 0, -0.573576, 0, 1, 0, 0.573576, 0, 0.819152, -3.00001, -9, -76)
+
+[node name="DestructibleWall" parent="DestructibleWalls" instance=ExtResource("11_1x2e3")]
+transform = Transform3D(0.743463, -0.259349, -0.190001, 0.285284, 0.752903, 0.0885991, 0.14824, -0.14824, 0.7824, 6.9719, -9.3518, -99.7644)
+
+[node name="PiedrasDestruibles3" type="Node3D" parent="DestructibleWalls"]
+transform = Transform3D(1.52324, 0, 0.419685, 0, 1.58, 0, -0.419685, 0, 1.52324, 141.759, -46.3826, -348.863)
+
+[node name="PiedraDestruible" parent="DestructibleWalls/PiedrasDestruibles3" instance=ExtResource("9_35ns0")]
+transform = Transform3D(0.533581, 0.12851, -0.595715, -0.312853, 0.737251, -0.12118, 0.522986, 0.309914, 0.535293, -89.0475, 11.6556, 90.12)
+
+[node name="PiedraDestruible2" parent="DestructibleWalls/PiedrasDestruibles3" instance=ExtResource("9_35ns0")]
+transform = Transform3D(-0.776366, -0.196201, 0.121904, -0.0786511, 0.626475, 0.507389, -0.217185, 0.474483, -0.619513, -87.1342, 11.2409, 90.6814)
+
+[node name="PiedraDestruible3" parent="DestructibleWalls/PiedrasDestruibles3" instance=ExtResource("9_35ns0")]
+transform = Transform3D(-0.748646, 0.242023, -0.192494, 0.188784, 0.757038, 0.217608, 0.244928, 0.156261, -0.756104, -87.884, 12.589, 90.4081)
+
+[node name="PiedraDestruible4" parent="DestructibleWalls/PiedrasDestruibles3" instance=ExtResource("9_35ns0")]
+transform = Transform3D(0.507269, -0.152147, -0.612886, 0.0701495, 0.79485, -0.139258, 0.627581, 0.0341328, 0.510958, -86.1191, 12.589, 91.1674)
+
+[node name="PiedraDestruible5" parent="DestructibleWalls/PiedrasDestruibles3" instance=ExtResource("9_35ns0")]
+transform = Transform3D(0.115529, -0.793902, 0.111681, 0.800535, 0.120364, 0.0275045, -0.0435535, 0.106453, 0.801792, -89.2036, 13.5939, 90.1662)
+
+[node name="PiedraDestruible6" parent="DestructibleWalls/PiedrasDestruibles3" instance=ExtResource("9_35ns0")]
+transform = Transform3D(-0.252365, -0.0680366, 0.76667, 0.633154, 0.440409, 0.247499, -0.437639, 0.676395, -0.0840327, -87.3351, 13.8486, 91.0148)
+
+[node name="PiedrasDestruibles4" type="Node3D" parent="DestructibleWalls"]
+transform = Transform3D(0.115492, 0, 0.993308, 0, 1, 0, -0.993308, 0, 0.115492, -117.66, -34.9104, -288.47)
+
+[node name="PiedraDestruible" parent="DestructibleWalls/PiedrasDestruibles4" instance=ExtResource("9_35ns0")]
+transform = Transform3D(0.533581, 0.12851, -0.595715, -0.312853, 0.737251, -0.12118, 0.522986, 0.309914, 0.535293, -89.0475, 11.6556, 90.12)
+
+[node name="PiedraDestruible2" parent="DestructibleWalls/PiedrasDestruibles4" instance=ExtResource("9_35ns0")]
+transform = Transform3D(-0.776366, -0.196201, 0.121904, -0.0786511, 0.626475, 0.507389, -0.217185, 0.474483, -0.619513, -87.1342, 11.2409, 90.6814)
+
+[node name="PiedraDestruible3" parent="DestructibleWalls/PiedrasDestruibles4" instance=ExtResource("9_35ns0")]
+transform = Transform3D(-0.748646, 0.242023, -0.192494, 0.188784, 0.757038, 0.217608, 0.244928, 0.156261, -0.756104, -87.884, 12.589, 90.4081)
+
+[node name="PiedraDestruible4" parent="DestructibleWalls/PiedrasDestruibles4" instance=ExtResource("9_35ns0")]
+transform = Transform3D(0.507269, -0.152147, -0.612886, 0.0701495, 0.79485, -0.139258, 0.627581, 0.0341328, 0.510958, -86.1191, 12.589, 91.1674)
+
+[node name="PiedraDestruible5" parent="DestructibleWalls/PiedrasDestruibles4" instance=ExtResource("9_35ns0")]
+transform = Transform3D(0.115529, -0.793902, 0.111681, 0.800535, 0.120364, 0.0275045, -0.0435535, 0.106453, 0.801792, -89.2036, 13.5939, 90.1662)
+
+[node name="PiedraDestruible6" parent="DestructibleWalls/PiedrasDestruibles4" instance=ExtResource("9_35ns0")]
+transform = Transform3D(-0.252365, -0.0680366, 0.76667, 0.633154, 0.440409, 0.247499, -0.437639, 0.676395, -0.0840327, -87.3351, 13.8486, 91.0148)
+
+[node name="Marker3D" type="Marker3D" parent="."]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -7, 4, 7)
+
+[node name="Camera3D" type="Camera3D" parent="Marker3D"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0)
+
+[editable path="PlayerCharacter"]
 [editable path="AreasDeGases/GasArea"]
 [editable path="AreasDeGases/GasArea2"]
 [editable path="AreasDeGases/GasArea3"]
