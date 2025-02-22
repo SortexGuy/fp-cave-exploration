@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://hw2ivride3pm"]
+
+[ext_resource type="PackedScene" uid="uid://d3rfrpbam3cca" path="res://assets/ZonaInicial.glb" id="1_7f04g"]
+
+[node name="InitialZone" instance=ExtResource("1_7f04g")]

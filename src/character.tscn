@@ -1,10 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://bed8les37cpj3"]
+[gd_scene load_steps=13 format=3 uid="uid://bed8les37cpj3"]
 
 [ext_resource type="Script" path="res://src/player_character.gd" id="1_8qmik"]
 [ext_resource type="Resource" uid="uid://csctq2870tbi7" path="res://resources/player_inventory.res" id="2_73b0v"]
 [ext_resource type="Script" path="res://src/hurt_box.gd" id="2_jp1m0"]
-[ext_resource type="Script" path="res://src/heads_up_display.gd" id="3_gamiv"]
-[ext_resource type="Theme" uid="uid://cfegnsa7ejbi2" path="res://resources/heads_up_display.theme" id="5_4e2ik"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uegv6"]
 radius = 0.4
@@ -39,6 +37,7 @@ height = 0.5
 radius = 0.1
 
 [node name="PlayerCharacter" type="CharacterBody3D"]
+process_mode = 4
 collision_layer = 2
 collision_mask = 37
 floor_block_on_wall = false
@@ -47,7 +46,7 @@ floor_snap_length = 0.2
 script = ExtResource("1_8qmik")
 inventory = ExtResource("2_73b0v")
 WALK_SPEED = 4.5
-mouse_sens = 0.1
+mouse_sens = 0.35
 
 [node name="LowBodyCollision" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
@@ -171,60 +170,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 [node name="LowHead" type="Marker3D" parent="HeadPositions"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
-
-[node name="HUD" type="CanvasLayer" parent="."]
-unique_name_in_owner = true
-script = ExtResource("3_gamiv")
-
-[node name="Control" type="Control" parent="HUD"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="InventoryContainer" type="HBoxContainer" parent="HUD/Control"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.73
-anchor_top = 0.87
-anchor_right = 0.98
-anchor_bottom = 0.98
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_constants/separation = 16
-
-[node name="ItemContainer1" type="PanelContainer" parent="HUD/Control/InventoryContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("5_4e2ik")
-
-[node name="ItemTextureRect1" type="TextureRect" parent="HUD/Control/InventoryContainer/ItemContainer1"]
-unique_name_in_owner = true
-layout_mode = 2
-expand_mode = 1
-
-[node name="ItemContainer2" type="PanelContainer" parent="HUD/Control/InventoryContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("5_4e2ik")
-
-[node name="ItemTextureRect2" type="TextureRect" parent="HUD/Control/InventoryContainer/ItemContainer2"]
-unique_name_in_owner = true
-layout_mode = 2
-expand_mode = 1
-
-[node name="ItemContainer3" type="PanelContainer" parent="HUD/Control/InventoryContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("5_4e2ik")
-
-[node name="ItemTextureRect3" type="TextureRect" parent="HUD/Control/InventoryContainer/ItemContainer3"]
-unique_name_in_owner = true
-layout_mode = 2
-expand_mode = 1
 
 [connection signal="timeout" from="GasTimer" to="." method="_on_hurt_boxes_take_damage"]
 [connection signal="gas_entered" from="HurtBoxes/LowBody" to="." method="_on_hurtboxes_gas_entered"]

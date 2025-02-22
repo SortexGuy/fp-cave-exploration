@@ -20,8 +20,8 @@ const JUMP_VELOCITY = 3.0 * MASS
 @onready var RUN_SPEED = WALK_SPEED * 2.2
 @onready var SLOW_SPEED = WALK_SPEED * 0.7
 
-@export_range(0.00001, 0.1, 0.00001)
-var mouse_sens: float = .001
+@export_range(0.0001, 1.0, 0.0001)
+var mouse_sens: float = .01
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -39,7 +39,6 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var high_body: Area3D = %HighBody
 @onready var high_head: Marker3D = %HighHead
 @onready var low_head: Marker3D = %LowHead
-@onready var hud: HeadsUpDisplay = %HUD
 @onready var hurtboxes: Node3D = %HurtBoxes
 
 @onready var gas_timer: Timer = %GasTimer
@@ -51,10 +50,10 @@ var wall_direction: Vector3 = Vector3.ZERO
 func _ready() -> void:
 	ModManager.mod_added.connect(mods_added)
 	ModManager.mod_removed.connect(mods_removed)
+	GameManager._set_p_inv(inventory)
 	
 	for hurtbox in hurtboxes.get_children() as Array[HurtBox]:
 		hurtbox.player = self
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _physics_process(delta: float) -> void:
 	match player_state:
@@ -99,8 +98,8 @@ func _grounded_state(delta: float) -> void:
 			var res = wall_climb_cast.collision_result.front()
 			
 			wall_direction = -res.normal
-			var grab_xform: = wall_grab_cast.transform
-			wall_grab_cast.transform.basis = grab_xform.basis.looking_at(
+			var grab_xform: = wall_grab_cast.global_transform
+			wall_grab_cast.global_transform.basis = grab_xform.basis.looking_at(
 				grab_xform.origin + wall_direction)
 			velocity = Vector3.ZERO
 		
@@ -148,7 +147,7 @@ func _movement_process(delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-	var direction = (head_pivot.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	var direction = (head_pivot.global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
 		velocity.x = direction.x * speed
 		velocity.z = direction.z * speed
@@ -188,21 +187,21 @@ func _handle_interaccion(delta: float) -> void:
 
 func _wall_movement(delta: float) -> void:
 	wall_grab_cast.force_shapecast_update()
-	var wall_basis: Vector3 = wall_grab_cast.transform.basis * Vector3.FORWARD
+	var wall_basis: Vector3 = wall_grab_cast.global_transform.basis * Vector3.FORWARD
 	var xform: Transform3D
 	if wall_grab_cast.is_colliding():
 		var res: Dictionary = wall_grab_cast.collision_result.front()
 		var point: Vector3 = res.point - (res.normal * 0.5)
-		xform = wall_grab_cast.transform.looking_at(point)
-		wall_grab_cast.transform = xform
+		xform = wall_grab_cast.global_transform.looking_at(point)
+		wall_grab_cast.global_transform = xform
 	else:
-		xform = wall_climb_cast.transform
+		xform = wall_climb_cast.global_transform
 	
 	var speed = SLOW_SPEED
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-	var direction = (xform.basis * Vector3(input_dir.x, -input_dir.y, -0.5)).normalized()
+	var direction = (xform.basis * Vector3(input_dir.x, -input_dir.y, -0.75)).normalized()
 	if input_dir:
 		velocity = direction * speed
 		#velocity.x = direction.x * speed

@@ -11,19 +11,19 @@ config_version=5
 [application]
 
 config/name="FPS Puzzle Exploration"
-run/main_scene="res://src/world.tscn"
+run/main_scene="res://src/game.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
-ModManager="*res://src/mod_manager.gd"
-GameManager="*res://src/game_manager.gd"
+ModManager="*res://src/autoloads/mod_manager.gd"
+GameManager="*res://src/autoloads/game_manager.gd"
 
 [display]
 
-window/size/viewport_width=960
-window/size/viewport_height=540
+window/size/viewport_width=1280
+window/size/viewport_height=720
 window/vsync/vsync_mode=0
 
 [input]
