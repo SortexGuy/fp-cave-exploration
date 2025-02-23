@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://coq2iqn1v0an"]
+[gd_scene load_steps=38 format=3 uid="uid://coq2iqn1v0an"]
 
 [ext_resource type="PackedScene" uid="uid://bed8les37cpj3" path="res://src/character.tscn" id="1_0dk8b"]
 [ext_resource type="Script" path="res://src/world.gd" id="1_di5p2"]
@@ -16,6 +16,10 @@
 [ext_resource type="PackedScene" uid="uid://cqcp2vdvx05rf" path="res://src/objects/harness.tscn" id="13_473k2"]
 [ext_resource type="PackedScene" uid="uid://hw2ivride3pm" path="res://resources/initial_zone.tscn" id="14_dovar"]
 [ext_resource type="ArrayMesh" uid="uid://b2bsf8gxp78md" path="res://resources/bonzai_mesh.res" id="17_d0b2v"]
+[ext_resource type="PackedScene" uid="uid://c8t7doandeump" path="res://assets/objetos/Piedras.glb" id="17_kkkuq"]
+[ext_resource type="PackedScene" uid="uid://brhtrl8s8n55m" path="res://assets/objetos/estalactita.glb" id="18_m8d4s"]
+[ext_resource type="PackedScene" uid="uid://byrceqc20i6u1" path="res://assets/objetos/zapatosTexture.glb" id="19_o6w5t"]
+[ext_resource type="PackedScene" uid="uid://ckc2ul2tvscu0" path="res://assets/objetos/CintaMetrica.glb" id="20_yl57h"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ue2ve"]
 size = Vector3(1, 8, 17)
@@ -91,6 +95,7 @@ unique_name_in_owner = true
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2, 0, 1)
 
 [node name="Map" type="Node3D" parent="."]
+metadata/_edit_lock_ = true
 
 [node name="CaveMapFinal" parent="Map" instance=ExtResource("2_t762b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.10044, -9.44371, -41.4653)
@@ -118,6 +123,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 5)
 shape = SubResource("BoxShape3D_3qdwr")
 
 [node name="Decor" type="Node3D" parent="."]
+metadata/_edit_lock_ = true
 
 [node name="Trees" type="Node3D" parent="Decor"]
 
@@ -278,11 +284,13 @@ directional_shadow_mode = 0
 directional_shadow_max_distance = 200.0
 directional_shadow_pancake_size = 0.0
 sky_mode = 1
+metadata/_edit_lock_ = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ppy0g")
 
 [node name="ClimbingWalls" type="Node3D" parent="."]
+metadata/_edit_lock_ = true
 
 [node name="ClimbAreas" type="Area3D" parent="ClimbingWalls"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.928, -10, -133.849)
@@ -299,6 +307,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1.1, 6.8)
 shape = SubResource("BoxShape3D_wryvb")
 
 [node name="Interactables" type="Node3D" parent="."]
+metadata/_edit_lock_ = true
 
 [node name="Pickaxe" parent="Interactables" instance=ExtResource("3_uri07")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -1.5)
@@ -319,6 +328,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 2.5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.50209, -0.00254488, 3.51323)
 
 [node name="AreasDeGases" type="Node3D" parent="."]
+metadata/_edit_lock_ = true
 
 [node name="GasArea" parent="AreasDeGases" instance=ExtResource("10_hhe8w")]
 transform = Transform3D(0.999477, 0, -0.0323353, 0, 1, 0, 0.0323353, 0, 0.999477, 90.3952, -21.4285, -172.438)
@@ -1178,6 +1188,7 @@ anim_offset_max = 0.5
 
 [node name="VetaMineral" type="Node3D" parent="."]
 transform = Transform3D(0.115492, 0, 0.993308, 0, 1, 0, -0.993308, 0, 0.115492, -24.5305, 10.7803, -343.749)
+metadata/_edit_lock_ = true
 
 [node name="BetaMineral" parent="VetaMineral" instance=ExtResource("11_phv5p")]
 transform = Transform3D(5.16, 0, 3.57628e-07, 0, 5.16, 0, -3.57628e-07, 0, 5.16, 3.98834, -10.1563, -23.2645)
@@ -1297,6 +1308,7 @@ transform = Transform3D(5.14129, -1.46312, -2.16363, 1.90938, -1.8921, 3.85992, 
 transform = Transform3D(-0.54115, -4.01668, 6.44869, 7.52848, -1.15183, -0.0856726, 1.02039, 6.36802, 4.05206, 21.6392, 13.1953, -8.72864)
 
 [node name="DestructibleWalls" type="Node3D" parent="."]
+metadata/_edit_lock_ = true
 
 [node name="DestructibleWall2" parent="DestructibleWalls" instance=ExtResource("11_1x2e3")]
 transform = Transform3D(0.819152, 0, -0.573576, 0, 1, 0, 0.573576, 0, 0.819152, -3.00001, -9, -76)
@@ -1348,9 +1360,161 @@ transform = Transform3D(-0.252365, -0.0680366, 0.76667, 0.633154, 0.440409, 0.24
 
 [node name="Marker3D" type="Marker3D" parent="."]
 transform = Transform3D(0.71934, 0, -0.694659, 0, 1, 0, 0.694659, 0, 0.71934, -7, 3.2, 4.6)
+metadata/_edit_lock_ = true
 
 [node name="Camera3D" type="Camera3D" parent="Marker3D"]
 transform = Transform3D(1, 0, 0, 0, 0.995396, 0.0958458, 0, -0.0958458, 0.995396, 0, 0, 0)
+
+[node name="SalaZapatosDeco" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -82.2499, -4.28029, -276.678)
+
+[node name="PiedrasDECO" type="Node3D" parent="SalaZapatosDeco"]
+
+[node name="Piedras" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(1, 0, 0, 0, 0.350011, 0.936746, 0, -0.936746, 0.350011, -0.0520859, -0.0623026, 20.0397)
+
+[node name="Piedras2" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(0.436095, 0, 0.899901, 0, 1, 0, -0.899901, 0, 0.436095, 1.80428, -0.262249, 19.7964)
+
+[node name="Piedras3" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(0.64971, 0, 1.3407, -1.22979, 0.593355, 0.595959, -0.533961, -1.36658, 0.258759, 3.65387, 0, 21.2007)
+
+[node name="Piedras4" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(-1.00308, -0.899269, -0.636211, -0.103829, -0.779442, 1.26542, -1.09666, 0.896323, 0.46211, -7.93961, -1.9011, 17.87)
+
+[node name="Piedras5" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(-1.08995, 0.902298, 0.466342, -0.103829, -0.779442, 1.26542, 1.01036, 0.893274, 0.633115, -10.6962, -2.40895, 17.0215)
+
+[node name="Piedras19" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(-1.08995, 0.902298, 0.466342, -0.103829, -0.779442, 1.26542, 1.01036, 0.893274, 0.633115, -10.6962, -2.40895, 17.0215)
+
+[node name="Piedras20" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(-0.906124, 0.13875, -0.568418, -0.506725, -0.709991, 0.634472, -0.29254, 0.800046, 0.661634, -21.0922, -4.47614, 4.25656)
+
+[node name="Piedras6" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(-1.2323, -1.45897, -0.999769, -0.150229, -1.12776, 1.83092, -1.76226, 1.11636, 0.543027, -4.96338, -0.827999, 20.3136)
+
+[node name="Piedras7" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(1.29421, 0.790267, 1.53205, 0.46269, 1.68623, -1.26065, -1.66061, 1.08573, 0.842767, -10.0644, -1.37365, 20.1696)
+
+[node name="Piedras8" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(-0.500809, 0.159264, 1.18364, -0.202955, -1.27617, 0.0858418, 1.17693, -0.152298, 0.518465, -11.7311, -2.32101, -17.3892)
+
+[node name="Piedras9" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(-0.364198, 0.901088, -0.235371, -0.825547, -0.429335, -0.366256, -0.431082, 0.0609199, 0.900254, -10.4593, -3.82647, -16.3255)
+
+[node name="Piedras10" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(1.77816, 0.494048, -1.64738, -0.93393, 2.26713, -0.32816, 1.4442, 0.857806, 1.81611, -13.4495, -5.20753, -14.6786)
+
+[node name="Piedras11" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(1.9314, 1.22607, 0.898938, -1.40432, 1.99554, 0.295502, -0.582416, -0.74579, 2.26853, 7.48524, -4.11646, -20.8601)
+
+[node name="Piedras12" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(1.49966, -1.70467, -0.941683, 1.90765, 1.52498, 0.277407, 0.391851, -0.900097, 2.25342, 12.2059, -4.49155, -21.8192)
+
+[node name="Piedras13" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(0.647508, -1.60456, 3.10711, 3.14243, 1.65335, 0.198949, -1.53424, 2.70921, 1.71881, 3.22186, -2.83211, -24.6687)
+
+[node name="Piedras21" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(3.38958, -4.84594, -3.21356, -2.97772, 1.74829, -5.77719, 4.99432, 4.33124, -1.2635, 25.3059, -0.309931, -16.5527)
+
+[node name="Piedras22" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(0.617646, 1.69015, -0.0383987, 0.417899, -0.113026, 1.74704, 1.63812, -0.608429, -0.431208, 16.794, -4.29648, -16.5527)
+
+[node name="Piedras23" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(0.385309, 1.05437, -0.0239544, 0.2607, -0.0705093, 1.08986, 1.02192, -0.379559, -0.269002, 17.9984, -4.29648, -14.2145)
+
+[node name="Piedras29" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(0.415625, -0.526204, -0.572157, -0.776426, -0.312438, -0.276665, -0.0376426, 0.634421, -0.610812, 28.1939, -1.47751, 5.58719)
+
+[node name="Piedras30" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(0.327449, -0.0938093, -0.813005, -0.776426, -0.312438, -0.276665, -0.258725, 0.81889, -0.198694, 29.5514, 0.191876, 16.5385)
+
+[node name="Piedras24" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(0.816675, -0.43865, -0.633536, -0.286336, 0.684298, -0.842905, 0.715398, 0.774637, 0.385854, 25.4647, 6.30816, -11.9644)
+
+[node name="Piedras15" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(-0.102162, -0.208772, 7.72068, 3.11862, -1.37276, 0.00453466, 1.42804, 2.98297, 0.542437, -20.2243, -2.83211, 12.7862)
+
+[node name="Piedras16" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(-0.869508, -3.41775, 2.88437, 3.17232, -1.12733, -0.00593507, 0.393759, 1.53516, 6.41717, -23.8488, -3.51203, 6.44809)
+
+[node name="Piedras17" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(2.72065, -3.76425, -3.29684, -1.27426, 1.96453, -6.42996, 6.67928, 1.90806, 0.116195, -26.5299, -0.368309, 11.2136)
+
+[node name="Piedras18" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(-3.61252, 5.34563, -0.0185201, 0.531246, 0.229739, 4.9177, 7.06258, 2.71701, -0.379383, -24.3874, -3.60505, -2.18976)
+
+[node name="Piedras14" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(-0.250157, -0.656559, -2.0379, 1.81382, -1.15517, 0.149515, -1.13762, -1.69741, 0.686509, -14.7919, -1.42634, -17.0269)
+
+[node name="Piedras25" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(-0.250157, -0.656559, -2.0379, -0.546053, -1.96435, 0.699892, -2.07025, 0.597455, 0.0616438, 6.34321, -5.06294, 8.56348)
+
+[node name="Piedras26" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(1.05391, -0.205168, 0.246422, 0.225905, 1.0759, -0.070382, -0.227563, 0.117867, 1.07139, 6.34321, -5.06294, 3.01599)
+
+[node name="Piedras31" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(-0.902113, 1.66371, -0.239458, -2.81283, -0.575577, -0.232699, -0.623658, 0.189449, 1.3959, -0.578262, -7.70954, -4.95245)
+
+[node name="Piedras27" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(-0.454759, -0.620923, -0.32974, 0.0886495, -2.84004, 0.267678, -0.097819, 0.312845, 1.77555, 13.9154, -5.76004, 3.01599)
+
+[node name="Piedras28" parent="SalaZapatosDeco/PiedrasDECO" instance=ExtResource("17_kkkuq")]
+transform = Transform3D(0.187197, 0.184349, -1.67297, 0.140352, -2.78658, 0.113722, -0.411693, -0.866156, -0.72193, 21.626, -0.143926, 24.1782)
+
+[node name="EstalactitasDECO" type="Node3D" parent="SalaZapatosDeco"]
+
+[node name="estalactita" parent="SalaZapatosDeco/EstalactitasDECO" instance=ExtResource("18_m8d4s")]
+transform = Transform3D(8.72479, 0, 0, 0, -12.406, 7.62745e-07, 0, -1.08457e-06, -8.72479, -7.32304, 36.224, 0)
+
+[node name="estalactita9" parent="SalaZapatosDeco/EstalactitasDECO" instance=ExtResource("18_m8d4s")]
+transform = Transform3D(-4.34835, 3.12035e-07, 2.69988, 0, -6.7665, 4.4746e-07, 2.69988, 5.02555e-07, 4.34835, 5.25584, 26.5398, 11.5648)
+
+[node name="estalactita10" parent="SalaZapatosDeco/EstalactitasDECO" instance=ExtResource("18_m8d4s")]
+transform = Transform3D(-5.55308, 3.98485e-07, 3.44789, 0, -8.64119, 5.71431e-07, 3.44789, 6.4179e-07, 5.55308, 7.43957, 24.9705, 8.64105)
+
+[node name="estalactita11" parent="SalaZapatosDeco/EstalactitasDECO" instance=ExtResource("18_m8d4s")]
+transform = Transform3D(-5.55308, 3.98485e-07, 3.44789, 0, -8.64119, 5.71431e-07, 3.44789, 6.4179e-07, 5.55308, 15.3396, 23.9254, -1.28748)
+
+[node name="estalactita12" parent="SalaZapatosDeco/EstalactitasDECO" instance=ExtResource("18_m8d4s")]
+transform = Transform3D(-4.99325, 3.58312e-07, 3.10029, 0, -7.77003, 5.13823e-07, 3.10029, 5.77088e-07, 4.99325, 16.9871, 20.5965, -3.96152)
+
+[node name="estalactita2" parent="SalaZapatosDeco/EstalactitasDECO" instance=ExtResource("18_m8d4s")]
+transform = Transform3D(12.4162, 0, 0, 0, -6.22659, 9.06241e-07, 0, -5.44346e-07, -10.3662, -7.32304, 39.24, -5.37936)
+
+[node name="estalactita13" parent="SalaZapatosDeco/EstalactitasDECO" instance=ExtResource("18_m8d4s")]
+transform = Transform3D(6.67178, 0, 0, 0, -6.992, 4.87048e-07, 0, -6.1126e-07, -5.57118, -18.7567, 27.2429, -15.6021)
+
+[node name="estalactita14" parent="SalaZapatosDeco/EstalactitasDECO" instance=ExtResource("18_m8d4s")]
+transform = Transform3D(-6.32386, -4.8934e-07, -4.45997, 0, -8.67485, 6.04272e-07, -5.34105, 5.79384e-07, 5.28065, -21.7539, 27.2429, -11.4239)
+
+[node name="estalactita15" parent="SalaZapatosDeco/EstalactitasDECO" instance=ExtResource("18_m8d4s")]
+transform = Transform3D(12.8636, 0.686993, -4.52618e-08, 0.735406, -12.0168, 7.91715e-07, -2.03687e-14, -1.05226e-06, -9.07095, -29.3831, 32.0391, -4.56876)
+
+[node name="estalactita3" parent="SalaZapatosDeco/EstalactitasDECO" instance=ExtResource("18_m8d4s")]
+transform = Transform3D(4.34047, 0, 0, 0, -4.34047, 3.79456e-07, 0, -3.79456e-07, -4.34047, -2.28926, 36.5176, -3.34448)
+
+[node name="estalactita4" parent="SalaZapatosDeco/EstalactitasDECO" instance=ExtResource("18_m8d4s")]
+transform = Transform3D(-0.805654, -0.0940294, -3.81773, 0.574364, 3.8544, -0.21614, 3.77545, -0.60644, -0.781795, 6.23251, -1.30604, 19.9701)
+
+[node name="estalactita8" parent="SalaZapatosDeco/EstalactitasDECO" instance=ExtResource("18_m8d4s")]
+transform = Transform3D(3.57903, -0.185458, 0.306899, 0.172161, 3.58921, 0.161211, -0.314551, -0.145719, 3.5802, 25.8394, -3.62333, -2.07074)
+
+[node name="estalactita5" parent="SalaZapatosDeco/EstalactitasDECO" instance=ExtResource("18_m8d4s")]
+transform = Transform3D(0.91739, -0.417788, -2.70075, 1.26803, 2.5887, 0.0302713, 2.42088, -1.19761, 1.00759, 8.12132, -1.18599, 21.0013)
+
+[node name="estalactita6" parent="SalaZapatosDeco/EstalactitasDECO" instance=ExtResource("18_m8d4s")]
+transform = Transform3D(4.82722, -0.281065, 1.68052, 0.781458, 2.45702, -0.23203, -2.07016, 0.272101, 3.83107, 26.9182, -2.75682, 4.15903)
+
+[node name="estalactita7" parent="SalaZapatosDeco/EstalactitasDECO" instance=ExtResource("18_m8d4s")]
+transform = Transform3D(1.5538, -0.4491, 3.07386, 1.36141, 1.57798, 0.0390672, -2.30465, 0.629366, 2.09548, 26.6731, -2.67639, 1.40125)
+
+[node name="zapatosTexture" parent="SalaZapatosDeco" instance=ExtResource("19_o6w5t")]
+transform = Transform3D(-0.910765, 0.0606922, -0.694725, 0.161894, 1.12992, -0.113527, 0.678319, -0.188188, -0.905697, -18.0778, -4.22934, 8.08017)
+
+[node name="CintaMetrica" parent="SalaZapatosDeco" instance=ExtResource("20_yl57h")]
+transform = Transform3D(0.061349, -0.296797, 0.520852, 0.000644781, 0.523605, 0.29829, -0.599479, -0.02981, 0.0536235, -19.5062, -4.19196, 4.22281)
 
 [editable path="Map/InitialZone"]
 [editable path="AreasDeGases/GasArea"]
