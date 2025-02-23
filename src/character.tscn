@@ -1,10 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://bed8les37cpj3"]
+[gd_scene load_steps=13 format=3 uid="uid://bed8les37cpj3"]
 
 [ext_resource type="Script" path="res://src/player_character.gd" id="1_8qmik"]
 [ext_resource type="Resource" uid="uid://csctq2870tbi7" path="res://resources/player_inventory.res" id="2_73b0v"]
 [ext_resource type="Script" path="res://src/hurt_box.gd" id="2_jp1m0"]
-[ext_resource type="AudioStream" uid="uid://c5oitmgsychaf" path="res://assets/sounds/StepStone1.ogg" id="4_oe8s5"]
-[ext_resource type="AudioStream" uid="uid://c2ty7xa6v5g6g" path="res://assets/sounds/StepStone2.ogg" id="5_87muq"]
+[ext_resource type="PackedScene" uid="uid://em1mh34j6b4v" path="res://src/player_sfx_controller.tscn" id="4_fswmj"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uegv6"]
 radius = 0.4
@@ -36,16 +35,7 @@ radius = 0.2
 height = 0.5
 radius = 0.1
 
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_08580"]
-playback_mode = 1
-random_pitch = 2.0
-random_volume_offset_db = 2.0
-streams_count = 2
-stream_0/stream = ExtResource("4_oe8s5")
-stream_1/stream = ExtResource("5_87muq")
-
 [node name="PlayerCharacter" type="CharacterBody3D"]
-process_mode = 4
 collision_layer = 2
 collision_mask = 37
 floor_block_on_wall = false
@@ -137,7 +127,8 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -0.3)
 visible = false
 light_energy = 4.0
-spot_range = 45.0
+spot_range = 55.0
+spot_attenuation = 0.4
 spot_angle = 40.0
 spot_angle_attenuation = 2.0
 
@@ -175,12 +166,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 
-[node name="SoundFX" type="Node3D" parent="."]
-
-[node name="FootSteps" type="AudioStreamPlayer3D" parent="SoundFX"]
-stream = SubResource("AudioStreamRandomizer_08580")
-max_polyphony = 2
-bus = &"SoundFX"
+[node name="SoundFX" parent="." instance=ExtResource("4_fswmj")]
 
 [connection signal="timeout" from="GasTimer" to="." method="_on_hurt_boxes_take_damage"]
 [connection signal="gas_entered" from="HurtBoxes/LowBody" to="." method="_on_hurtboxes_gas_entered"]
@@ -189,3 +175,5 @@ bus = &"SoundFX"
 [connection signal="gas_entered" from="HurtBoxes/HighBody" to="." method="_on_hurtboxes_gas_entered"]
 [connection signal="gas_exited" from="HurtBoxes/HighBody" to="." method="_on_hurtboxes_gas_exited"]
 [connection signal="take_damage" from="HurtBoxes/HighBody" to="." method="_on_hurt_boxes_take_damage"]
+
+[editable path="SoundFX"]

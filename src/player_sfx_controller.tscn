@@ -1,0 +1,129 @@
+[gd_scene load_steps=13 format=3 uid="uid://em1mh34j6b4v"]
+
+[ext_resource type="Script" path="res://src/player_sfx_controller.gd" id="1_34a1t"]
+[ext_resource type="AudioStream" uid="uid://d33xspus8ihn0" path="res://assets/sounds/PioletsSFX.ogg" id="2_8fqsi"]
+[ext_resource type="AudioStream" uid="uid://diwi3bvgjjaa3" path="res://assets/sounds/Estep1.ogg" id="2_r4vw2"]
+[ext_resource type="AudioStream" uid="uid://l3v6hea3qmxc" path="res://assets/sounds/Estep2.ogg" id="3_d74om"]
+[ext_resource type="AudioStream" uid="uid://ht8dk264flww" path="res://assets/sounds/PickaxeSound.ogg" id="4_o715t"]
+[ext_resource type="AudioStream" uid="uid://c6863bpqibv8e" path="res://assets/sounds/TosSFX.ogg" id="5_tqfsw"]
+[ext_resource type="AudioStream" uid="uid://4u1pwqt8qmdd" path="res://assets/sounds/FlashlightClickSFX.ogg" id="6_x75tl"]
+[ext_resource type="AudioStream" uid="uid://d2yb4acmm42r2" path="res://assets/sounds/GasMaskSFX.ogg" id="7_asbqi"]
+[ext_resource type="AudioStream" uid="uid://clhee52o7rjte" path="res://assets/sounds/CameraFlashSFX.ogg" id="8_5ctrx"]
+
+[sub_resource type="Animation" id="Animation_ovsrb"]
+resource_name = "FootSteps"
+length = 1.6
+loop_mode = 1
+step = 0.05
+tracks/0/type = "audio"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FootSteps")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"clips": [{
+"end_offset": 0.0163009,
+"start_offset": 0.0,
+"stream": ExtResource("2_r4vw2")
+}, {
+"end_offset": 0.0427898,
+"start_offset": 0.0,
+"stream": ExtResource("3_d74om")
+}, {
+"end_offset": 0.0326018,
+"start_offset": 0.0142633,
+"stream": ExtResource("2_r4vw2")
+}, {
+"end_offset": 0.0753916,
+"start_offset": 0.0,
+"stream": ExtResource("3_d74om")
+}],
+"times": PackedFloat32Array(0, 0.4, 0.8, 1.2)
+}
+tracks/0/use_blend = true
+
+[sub_resource type="Animation" id="Animation_311xn"]
+resource_name = "Piolets"
+length = 0.9
+loop_mode = 1
+step = 0.05
+tracks/0/type = "audio"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Piolets")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"clips": [{
+"end_offset": 0.140595,
+"start_offset": 0.0,
+"stream": ExtResource("2_8fqsi")
+}, {
+"end_offset": 0.138558,
+"start_offset": 0.0,
+"stream": ExtResource("2_8fqsi")
+}],
+"times": PackedFloat32Array(0, 0.45)
+}
+tracks/0/use_blend = true
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mn3vw"]
+_data = {
+"FootSteps": SubResource("Animation_ovsrb"),
+"Piolets": SubResource("Animation_311xn")
+}
+
+[node name="SoundFX" type="Node"]
+script = ExtResource("1_34a1t")
+
+[node name="FootSteps" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+volume_db = -18.0
+pitch_scale = 2.0
+max_polyphony = 2
+bus = &"Steps"
+
+[node name="Piolets" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+volume_db = -18.0
+pitch_scale = 0.6
+max_polyphony = 2
+bus = &"Piolets"
+
+[node name="Pickaxe" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("4_o715t")
+volume_db = -10.0
+bus = &"SoundFX"
+
+[node name="SFXAnimations" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_mn3vw")
+}
+
+[node name="Coughs" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("5_tqfsw")
+volume_db = -10.0
+bus = &"SoundFX"
+parameters/looping = true
+
+[node name="Flashlight" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("6_x75tl")
+
+[node name="GasMask" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("7_asbqi")
+volume_db = -16.0
+bus = &"SoundFX"
+parameters/looping = true
+
+[node name="CameraFlash" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("8_5ctrx")
+bus = &"SoundFX"
+
+[node name="BrokenHarness" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true

@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://dix2dpe5161ln"]
+[gd_scene load_steps=15 format=3 uid="uid://dix2dpe5161ln"]
 
 [ext_resource type="Script" path="res://src/game.gd" id="1_e1l3b"]
 [ext_resource type="PackedScene" uid="uid://coq2iqn1v0an" path="res://src/world.tscn" id="1_hng2w"]
 [ext_resource type="Script" path="res://src/gui/heads_up_display.gd" id="2_66a4j"]
+[ext_resource type="Shader" path="res://resources/vignette.gdshader" id="2_sdbiq"]
 [ext_resource type="Theme" uid="uid://cfegnsa7ejbi2" path="res://resources/heads_up_display.theme" id="3_b0tar"]
 [ext_resource type="FontVariation" uid="uid://cy36dde3oif13" path="res://assets/fonts/PressStart2P_FontVar.res" id="5_mcdie"]
 [ext_resource type="Script" path="res://src/gui/main_menu.gd" id="5_vcdsf"]
@@ -10,6 +11,12 @@
 [ext_resource type="PackedScene" uid="uid://48qovg4wh6vv" path="res://src/end_screens/mineral_end_screen.tscn" id="8_i3ivc"]
 [ext_resource type="PackedScene" uid="uid://c7ad2qxtgboh" path="res://src/end_screens/camera_end_screen.tscn" id="9_7dyt4"]
 [ext_resource type="PackedScene" uid="uid://bq54cl7k4kl3v" path="res://src/end_screens/hole_end_screen.tscn" id="10_605c7"]
+[ext_resource type="AudioStream" uid="uid://bpkrrqydsxhwo" path="res://assets/music/CaveMusic.ogg" id="11_us8sk"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tqtqg"]
+shader = ExtResource("2_sdbiq")
+shader_parameter/outerRadius = 1.035
+shader_parameter/MainAlpha = 0.765
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tgbui"]
 
@@ -28,8 +35,15 @@ grow_vertical = 2
 stretch = true
 stretch_shrink = 4
 
+[node name="ColorRect" type="ColorRect" parent="MainWorld/SubViewportContainer"]
+material = SubResource("ShaderMaterial_tqtqg")
+layout_mode = 2
+
 [node name="SubViewport" type="SubViewport" parent="MainWorld/SubViewportContainer"]
 handle_input_locally = false
+use_occlusion_culling = true
+canvas_item_default_texture_filter = 0
+audio_listener_enable_3d = true
 size = Vector2i(320, 180)
 render_target_update_mode = 4
 
@@ -134,7 +148,7 @@ layout_mode = 2
 theme_override_constants/outline_size = 12
 theme_override_fonts/font = ExtResource("5_mcdie")
 theme_override_font_sizes/font_size = 46
-text = "SOME CAVE MISTERIES"
+text = "MURPHY'S CAVE"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
@@ -223,10 +237,30 @@ text = "EXIT"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Label" type="Label" parent="MainMenu/Control"]
+layout_mode = 0
+offset_left = 952.0
+offset_top = 32.0
+offset_right = 1251.0
+offset_bottom = 110.0
+theme_override_constants/line_spacing = 8
+text = "Made by:
+JulxsIV
+SortexTheGuy"
+
 [node name="MineralEndScreen" parent="." instance=ExtResource("8_i3ivc")]
+visible = false
 
 [node name="CameraEndScreen" parent="." instance=ExtResource("9_7dyt4")]
+visible = false
 
 [node name="HoleEndScreen" parent="." instance=ExtResource("10_605c7")]
+visible = false
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_us8sk")
+volume_db = -16.0
+autoplay = true
+bus = &"Music"
+playback_type = 1
+parameters/looping = true

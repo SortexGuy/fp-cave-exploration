@@ -43,11 +43,14 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 @onready var gas_timer: Timer = %GasTimer
 @onready var pickaxe_timer: Timer = %PickaxeTimer
+@onready var sound_fx: PlayerSoundFXController = $SoundFX
 
 var run_toggle: bool = false
 var wall_direction: Vector3 = Vector3.ZERO
+var prev_dir_zero: bool = false
 
 func _ready() -> void:
+	self.process_mode = Node.PROCESS_MODE_DISABLED
 	ModManager.mod_added.connect(mods_added)
 	ModManager.mod_removed.connect(mods_removed)
 	GameManager._set_p_inv(inventory)
@@ -90,6 +93,7 @@ func _grounded_state(delta: float) -> void:
 		high_body_collision.disabled = true
 		head_pivot.global_position.y = low_head.global_position.y
 		
+		sound_fx.run_state_change.emit(false)
 		previous_state = player_state
 		player_state = PLAYER_STATES.CROUCHING
 	elif Input.is_action_just_pressed("grab_wall") and wall_climb_cast.enabled:
@@ -119,6 +123,7 @@ func _crouching_state(delta: float) -> void:
 		player_state = PLAYER_STATES.MIDAIR
 	elif Input.is_action_just_pressed("crouch_toggle") and \
 		not anti_clip_cast.is_colliding():
+		sound_fx.run_state_change.emit(run_toggle)
 		previous_state = player_state
 		player_state = PLAYER_STATES.GROUNDED
 	
@@ -135,10 +140,12 @@ func _climbing_state(delta: float) -> void:
 		
 		previous_state = player_state
 		player_state = PLAYER_STATES.MIDAIR
+		
 
 func _movement_process(delta: float) -> void:
 	# Toggle run.
 	if Input.is_action_just_pressed("run_toggle"):
+		sound_fx.run_state_change.emit(run_toggle)
 		run_toggle = !run_toggle
 	
 	var speed = WALK_SPEED if !run_toggle else RUN_SPEED
@@ -156,12 +163,19 @@ func _movement_process(delta: float) -> void:
 		velocity.z = move_toward(velocity.z, 0, WALK_SPEED)
 	
 	move_and_slide()
+	
+	if prev_dir_zero and not input_dir.is_zero_approx():
+		sound_fx.sfx_animations.play("FootSteps")
+	elif not prev_dir_zero and input_dir.is_zero_approx():
+		sound_fx.sfx_animations.stop()
+	prev_dir_zero = input_dir.is_zero_approx()
 
 func _handle_pickaxe(delta: float) -> void:
 	if Input.is_action_pressed("use_pickaxe") and pickaxe_timer.is_stopped():
 		pickaxe_cast.force_shapecast_update()
 		if not pickaxe_cast.is_colliding(): return
 		pickaxe_timer.start()
+		sound_fx.pickaxe_play()
 		var res := pickaxe_cast.collision_result.front() as Dictionary
 		if res.collider is Area3D:
 			GameManager.mineral_ending.emit()
@@ -178,9 +192,13 @@ func _handle_interaccion(delta: float) -> void:
 	
 	if res.collider is not ObjectItem:
 		var collider := res.collider as Area3D
-		if collider.collision_layer & 256:
+		if collider.collision_layer & 256 and \
+		inventory.has_modifier(ModManager.Modifiers.Harness):
+			sound_fx.broken_harness.play()
 			GameManager.hole_ending.emit()
-		elif collider.collision_layer & 512:
+		elif collider.collision_layer & 512 and \
+		inventory.has_modifier(ModManager.Modifiers.Camera):
+			sound_fx.camera_flash.play()
 			GameManager.camera_ending.emit()
 		self.process_mode = Node.PROCESS_MODE_DISABLED
 		return
@@ -226,6 +244,12 @@ func _wall_movement(delta: float) -> void:
 		#velocity.y = move_toward(velocity.y, 0, WALK_SPEED)
 	
 	move_and_slide()
+	
+	if prev_dir_zero and not input_dir.is_zero_approx():
+		sound_fx.sfx_animations.play("Piolets")
+	elif not prev_dir_zero and input_dir.is_zero_approx():
+		sound_fx.sfx_animations.stop()
+	prev_dir_zero = input_dir.is_zero_approx()
 
 func _unhandled_input(event):
 	if event is InputEventKey:
@@ -245,7 +269,10 @@ func _unhandled_input(event):
 func mods_added(mod: ModManager.Modifiers) -> void:
 	match mod:
 		ModManager.Modifiers.FlashlightHelmet:
+			sound_fx.flashlight.play()
 			flashlight.show()
+		ModManager.Modifiers.GasMask:
+			sound_fx.gas_mask.play()
 		ModManager.Modifiers.Piolet:
 			wall_climb_cast.enabled = true
 		ModManager.Modifiers.Pickaxe:
@@ -254,18 +281,24 @@ func mods_added(mod: ModManager.Modifiers) -> void:
 func mods_removed(mod: ModManager.Modifiers) -> void:
 	match mod:
 		ModManager.Modifiers.FlashlightHelmet:
+			sound_fx.flashlight.play()
 			flashlight.hide()
+		ModManager.Modifiers.GasMask:
+			sound_fx.gas_mask.stop()
 		ModManager.Modifiers.Piolet:
 			wall_climb_cast.enabled = false
 		ModManager.Modifiers.Pickaxe:
 			pickaxe_cast.enabled = false
 
 func _on_hurt_boxes_take_damage() -> void:
+	
 	get_tree().reload_current_scene()
 
 func _on_hurtboxes_gas_entered() -> void:
 	if inventory.has_modifier(ModManager.Modifiers.GasMask): return
+	sound_fx.coughs.play()
 	gas_timer.start()
 
 func _on_hurtboxes_gas_exited() -> void:
+	sound_fx.coughs.stop()
 	gas_timer.stop()
