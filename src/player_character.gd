@@ -163,14 +163,28 @@ func _handle_pickaxe(delta: float) -> void:
 		if not pickaxe_cast.is_colliding(): return
 		pickaxe_timer.start()
 		var res := pickaxe_cast.collision_result.front() as Dictionary
-		var collider := res.collider as DestructibleStone
-		collider.destroy()
+		if res.collider is Area3D:
+			GameManager.mineral_ending.emit()
+			self.process_mode = Node.PROCESS_MODE_DISABLED
+		else:
+			var collider := res.collider as DestructibleStone
+			collider.destroy()
 
 func _handle_interaccion(delta: float) -> void:
 	if not Input.is_action_just_pressed("interaction_cast"): return
 	interaction_cast.force_shapecast_update()
 	if not interaction_cast.is_colliding(): return
 	var res := interaction_cast.collision_result.front() as Dictionary
+	
+	if res.collider is not ObjectItem:
+		var collider := res.collider as Area3D
+		if collider.collision_layer & 256:
+			GameManager.hole_ending.emit()
+		elif collider.collision_layer & 512:
+			GameManager.camera_ending.emit()
+		self.process_mode = Node.PROCESS_MODE_DISABLED
+		return
+	
 	var collider := res.collider as ObjectItem
 	
 	var item: InventoryItem = collider.item

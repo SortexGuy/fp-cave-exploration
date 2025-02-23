@@ -82,6 +82,9 @@ interaction_cast={
 3d_physics/layer_4="Hazards"
 3d_physics/layer_5="ClimbWalls"
 3d_physics/layer_6="BreakableWalls"
+3d_physics/layer_8="MineralEnd"
+3d_physics/layer_9="HoleEnd"
+3d_physics/layer_10="CameraEnd"
 
 [rendering]
 

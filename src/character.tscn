@@ -1,8 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://bed8les37cpj3"]
+[gd_scene load_steps=15 format=3 uid="uid://bed8les37cpj3"]
 
 [ext_resource type="Script" path="res://src/player_character.gd" id="1_8qmik"]
 [ext_resource type="Resource" uid="uid://csctq2870tbi7" path="res://resources/player_inventory.res" id="2_73b0v"]
 [ext_resource type="Script" path="res://src/hurt_box.gd" id="2_jp1m0"]
+[ext_resource type="AudioStream" uid="uid://c5oitmgsychaf" path="res://assets/sounds/StepStone1.ogg" id="4_oe8s5"]
+[ext_resource type="AudioStream" uid="uid://c2ty7xa6v5g6g" path="res://assets/sounds/StepStone2.ogg" id="5_87muq"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uegv6"]
 radius = 0.4
@@ -11,8 +13,6 @@ height = 0.8
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0guc3"]
 radius = 0.4
 height = 1.8
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_bgugt"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gsaiu"]
 radius = 0.4
@@ -36,6 +36,14 @@ radius = 0.2
 height = 0.5
 radius = 0.1
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_08580"]
+playback_mode = 1
+random_pitch = 2.0
+random_volume_offset_db = 2.0
+streams_count = 2
+stream_0/stream = ExtResource("4_oe8s5")
+stream_1/stream = ExtResource("5_87muq")
+
 [node name="PlayerCharacter" type="CharacterBody3D"]
 process_mode = 4
 collision_layer = 2
@@ -56,11 +64,6 @@ shape = SubResource("CapsuleShape3D_uegv6")
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 shape = SubResource("CapsuleShape3D_0guc3")
-
-[node name="PlaceholderBodyMesh" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-visible = false
-mesh = SubResource("CapsuleMesh_bgugt")
 
 [node name="GasTimer" type="Timer" parent="."]
 unique_name_in_owner = true
@@ -103,7 +106,7 @@ shape = SubResource("CapsuleShape3D_y7ieu")
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
 shape = SubResource("SphereShape3D_oe8yc")
-target_position = Vector3(0, 0, -1)
+target_position = Vector3(0, 0, -1.25)
 collide_with_areas = true
 
 [node name="AntiClipCast" type="ShapeCast3D" parent="."]
@@ -121,7 +124,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 unique_name_in_owner = true
 enabled = false
 shape = SubResource("SphereShape3D_qeyo8")
-target_position = Vector3(0, 0, -0.5)
+target_position = Vector3(0, 0, -1)
 collision_mask = 16
 collide_with_areas = true
 
@@ -148,15 +151,16 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 enabled = false
 shape = SubResource("CylinderShape3D_1c4t4")
-target_position = Vector3(0, -1.25, 0)
-collision_mask = 32
+target_position = Vector3(0, -2, 0)
+collision_mask = 160
+collide_with_areas = true
 
 [node name="InteractionCast" type="ShapeCast3D" parent="HeadPivot/MainCamera"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 shape = SubResource("CylinderShape3D_b78km")
-target_position = Vector3(0, -2, 0)
-collision_mask = 4
+target_position = Vector3(0, -2.5, 0)
+collision_mask = 772
 collide_with_areas = true
 collide_with_bodies = false
 debug_shape_custom_color = Color(0.052, 0.52, 0.169, 1)
@@ -170,6 +174,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 [node name="LowHead" type="Marker3D" parent="HeadPositions"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+
+[node name="SoundFX" type="Node3D" parent="."]
+
+[node name="FootSteps" type="AudioStreamPlayer3D" parent="SoundFX"]
+stream = SubResource("AudioStreamRandomizer_08580")
+max_polyphony = 2
+bus = &"SoundFX"
 
 [connection signal="timeout" from="GasTimer" to="." method="_on_hurt_boxes_take_damage"]
 [connection signal="gas_entered" from="HurtBoxes/LowBody" to="." method="_on_hurtboxes_gas_entered"]

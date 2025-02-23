@@ -1,5 +1,9 @@
 extends Node
 
+signal mineral_ending()
+signal hole_ending()
+signal camera_ending()
+
 var p_inv: Inventory = null :
 	set (inv): _set_p_inv
 

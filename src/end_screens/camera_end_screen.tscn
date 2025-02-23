@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7ad2qxtgboh"]
+
+[ext_resource type="PackedScene" uid="uid://b2v8uha1mu5oa" path="res://src/end_screens/end_screen.scn" id="1_7ot1p"]
+[ext_resource type="Script" path="res://src/end_screens/camera_end_screen.gd" id="2_plk76"]
+
+[node name="CameraEndScreen" instance=ExtResource("1_7ot1p")]
+script = ExtResource("2_plk76")
+
+[node name="Label" parent="Control/ColorRect" index="0"]
+visible = false

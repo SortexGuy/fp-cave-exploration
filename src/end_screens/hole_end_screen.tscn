@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bq54cl7k4kl3v"]
+
+[ext_resource type="PackedScene" uid="uid://b2v8uha1mu5oa" path="res://src/end_screens/end_screen.scn" id="1_763q6"]
+[ext_resource type="Script" path="res://src/end_screens/hole_end_screen.gd" id="2_j87ie"]
+
+[node name="HoleEndScreen" instance=ExtResource("1_763q6")]
+script = ExtResource("2_j87ie")
+
+[node name="Label" parent="Control/ColorRect" index="0"]
+visible = false
