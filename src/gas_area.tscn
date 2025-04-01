@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dfhtx7st5g28s"]
 
-[ext_resource type="Script" path="res://src/gas_area.gd" id="1_jo7t5"]
+[ext_resource type="Script" uid="uid://ccmkmu44yakkr" path="res://src/gas_area.gd" id="1_jo7t5"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ank2d"]
 radius = 1.2

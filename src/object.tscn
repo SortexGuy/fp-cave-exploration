@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://c064kigcnjno2"]
 
-[ext_resource type="Script" path="res://src/object.gd" id="1_q85os"]
-[ext_resource type="Script" path="res://src/inv_item.gd" id="2_yr1ls"]
+[ext_resource type="Script" uid="uid://fuuyq0674ta6" path="res://src/object.gd" id="1_q85os"]
+[ext_resource type="Script" uid="uid://d3b5lgi1ifqkq" path="res://src/inv_item.gd" id="2_yr1ls"]
 [ext_resource type="ArrayMesh" uid="uid://grnsgm08y2jl" path="res://assets/objetos/File/GasMasakFile.res" id="3_i1ryl"]
 
 [sub_resource type="Resource" id="Resource_e1ox5"]

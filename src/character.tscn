@@ -1,8 +1,8 @@
 [gd_scene load_steps=13 format=3 uid="uid://bed8les37cpj3"]
 
-[ext_resource type="Script" path="res://src/player_character.gd" id="1_8qmik"]
+[ext_resource type="Script" uid="uid://bq432sv8g1k55" path="res://src/player_character.gd" id="1_8qmik"]
 [ext_resource type="Resource" uid="uid://csctq2870tbi7" path="res://resources/player_inventory.res" id="2_73b0v"]
-[ext_resource type="Script" path="res://src/hurt_box.gd" id="2_jp1m0"]
+[ext_resource type="Script" uid="uid://bidmqvaquhmk" path="res://src/hurt_box.gd" id="2_jp1m0"]
 [ext_resource type="PackedScene" uid="uid://em1mh34j6b4v" path="res://src/player_sfx_controller.tscn" id="4_fswmj"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uegv6"]

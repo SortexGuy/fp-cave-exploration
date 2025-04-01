@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://48qovg4wh6vv"]
 
 [ext_resource type="PackedScene" uid="uid://b2v8uha1mu5oa" path="res://src/end_screens/end_screen.scn" id="1_humbv"]
-[ext_resource type="Script" path="res://src/end_screens/mineral_end_screen.gd" id="2_0qgej"]
+[ext_resource type="Script" uid="uid://jwiusn3w3xye" path="res://src/end_screens/mineral_end_screen.gd" id="2_0qgej"]
 
 [node name="MineralEndScreen" instance=ExtResource("1_humbv")]
 script = ExtResource("2_0qgej")

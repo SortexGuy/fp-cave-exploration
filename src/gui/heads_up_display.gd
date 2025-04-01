@@ -8,3 +8,9 @@ class_name HeadsUpDisplay
 func _ready() -> void:
 	var arr: Array[TextureRect] = [item_tex_rect_1, item_tex_rect_2, item_tex_rect_3]
 	GameManager.hud_item_tex_rects = arr
+
+func tween_hide() -> void:
+	self.hide()
+
+func tween_show() -> void:
+	self.show()

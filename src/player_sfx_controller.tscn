@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=3 uid="uid://em1mh34j6b4v"]
 
-[ext_resource type="Script" path="res://src/player_sfx_controller.gd" id="1_34a1t"]
+[ext_resource type="Script" uid="uid://br2qurjowlrl7" path="res://src/player_sfx_controller.gd" id="1_34a1t"]
 [ext_resource type="AudioStream" uid="uid://d33xspus8ihn0" path="res://assets/sounds/PioletsSFX.ogg" id="2_8fqsi"]
 [ext_resource type="AudioStream" uid="uid://diwi3bvgjjaa3" path="res://assets/sounds/Estep1.ogg" id="2_r4vw2"]
 [ext_resource type="AudioStream" uid="uid://l3v6hea3qmxc" path="res://assets/sounds/Estep2.ogg" id="3_d74om"]
@@ -70,8 +70,8 @@ tracks/0/use_blend = true
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_mn3vw"]
 _data = {
-"FootSteps": SubResource("Animation_ovsrb"),
-"Piolets": SubResource("Animation_311xn")
+&"FootSteps": SubResource("Animation_ovsrb"),
+&"Piolets": SubResource("Animation_311xn")
 }
 
 [node name="SoundFX" type="Node"]
@@ -99,7 +99,7 @@ bus = &"SoundFX"
 
 [node name="SFXAnimations" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_mn3vw")
+&"": SubResource("AnimationLibrary_mn3vw")
 }
 
 [node name="Coughs" type="AudioStreamPlayer" parent="."]

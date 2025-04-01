@@ -252,14 +252,6 @@ func _wall_movement(delta: float) -> void:
 	prev_dir_zero = input_dir.is_zero_approx()
 
 func _unhandled_input(event):
-	if event is InputEventKey:
-		if event.pressed:
-			if event.keycode == KEY_ESCAPE:
-				if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-					Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-				else:
-					Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	
 	if event is InputEventMouseMotion and Input.mouse_mode != Input.MOUSE_MODE_VISIBLE:
 		var rel_vec = event.relative.x * mouse_sens
 		head_pivot.rotate_y(-deg_to_rad(rel_vec))
@@ -291,7 +283,6 @@ func mods_removed(mod: ModManager.Modifiers) -> void:
 			pickaxe_cast.enabled = false
 
 func _on_hurt_boxes_take_damage() -> void:
-	
 	get_tree().reload_current_scene()
 
 func _on_hurtboxes_gas_entered() -> void:

@@ -1,29 +1,40 @@
-[gd_scene load_steps=15 format=3 uid="uid://dix2dpe5161ln"]
+[gd_scene load_steps=19 format=3 uid="uid://dix2dpe5161ln"]
 
-[ext_resource type="Script" path="res://src/game.gd" id="1_e1l3b"]
+[ext_resource type="Script" uid="uid://04w71bhk0xqs" path="res://src/game.gd" id="1_e1l3b"]
 [ext_resource type="PackedScene" uid="uid://coq2iqn1v0an" path="res://src/world.tscn" id="1_hng2w"]
-[ext_resource type="Script" path="res://src/gui/heads_up_display.gd" id="2_66a4j"]
-[ext_resource type="Shader" path="res://resources/vignette.gdshader" id="2_sdbiq"]
+[ext_resource type="Script" uid="uid://ckt3b2qhw21op" path="res://src/gui/heads_up_display.gd" id="2_66a4j"]
+[ext_resource type="Shader" uid="uid://cqxh4dm6cxq63" path="res://resources/vignette.gdshader" id="2_sdbiq"]
 [ext_resource type="Theme" uid="uid://cfegnsa7ejbi2" path="res://resources/heads_up_display.theme" id="3_b0tar"]
 [ext_resource type="FontVariation" uid="uid://cy36dde3oif13" path="res://assets/fonts/PressStart2P_FontVar.res" id="5_mcdie"]
-[ext_resource type="Script" path="res://src/gui/main_menu.gd" id="5_vcdsf"]
+[ext_resource type="Script" uid="uid://cp1s4tmybh8oj" path="res://src/gui/main_menu.gd" id="5_vcdsf"]
 [ext_resource type="Theme" uid="uid://bjp4ehh3j8k2e" path="res://resources/default.theme" id="6_7lkc8"]
 [ext_resource type="PackedScene" uid="uid://48qovg4wh6vv" path="res://src/end_screens/mineral_end_screen.tscn" id="8_i3ivc"]
 [ext_resource type="PackedScene" uid="uid://c7ad2qxtgboh" path="res://src/end_screens/camera_end_screen.tscn" id="9_7dyt4"]
 [ext_resource type="PackedScene" uid="uid://bq54cl7k4kl3v" path="res://src/end_screens/hole_end_screen.tscn" id="10_605c7"]
 [ext_resource type="AudioStream" uid="uid://bpkrrqydsxhwo" path="res://assets/music/CaveMusic.ogg" id="11_us8sk"]
+[ext_resource type="Script" uid="uid://gcpieaeg2kkd" path="res://src/gui/pause_menu.gd" id="12_xdrfk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tqtqg"]
 shader = ExtResource("2_sdbiq")
 shader_parameter/outerRadius = 1.035
 shader_parameter/MainAlpha = 0.765
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xdrfk"]
+
+[sub_resource type="InputEventAction" id="InputEventAction_xdrfk"]
+action = &"ui_cancel"
+
+[sub_resource type="Shortcut" id="Shortcut_g3j30"]
+events = [SubResource("InputEventAction_xdrfk")]
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tgbui"]
 
 [node name="Game" type="Node"]
+process_mode = 3
 script = ExtResource("1_e1l3b")
 
 [node name="MainWorld" type="CanvasLayer" parent="."]
+layer = 5
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="MainWorld"]
 texture_filter = 1
@@ -49,13 +60,16 @@ render_target_update_mode = 4
 
 [node name="World" parent="MainWorld/SubViewportContainer/SubViewport" instance=ExtResource("1_hng2w")]
 unique_name_in_owner = true
+process_mode = 1
 
 [node name="HeadsUpDisplay" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
 layer = 20
+visible = false
 script = ExtResource("2_66a4j")
 
 [node name="Control" type="Control" parent="HeadsUpDisplay"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -105,11 +119,75 @@ unique_name_in_owner = true
 layout_mode = 2
 expand_mode = 1
 
+[node name="PauseMenu" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+layer = 50
+visible = false
+script = ExtResource("12_xdrfk")
+
+[node name="Control" type="Control" parent="PauseMenu"]
+process_mode = 2
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("6_7lkc8")
+
+[node name="CenterContainer" type="CenterContainer" parent="PauseMenu/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="PauseMenu/Control/CenterContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PauseMenu/Control/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 56
+theme_override_constants/margin_top = 56
+theme_override_constants/margin_right = 56
+theme_override_constants/margin_bottom = 56
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu/Control/CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Label" type="Label" parent="PauseMenu/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Paused"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="PauseMenu/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+theme_override_styles/separator = SubResource("StyleBoxEmpty_xdrfk")
+
+[node name="ContinueButton" type="Button" parent="PauseMenu/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+shortcut = SubResource("Shortcut_g3j30")
+text = "Continue"
+
+[node name="MainMenuButton" type="Button" parent="PauseMenu/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(192, 60)
+layout_mode = 2
+text = "Main Menu"
+
 [node name="MainMenu" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
+layer = 50
 script = ExtResource("5_vcdsf")
 
 [node name="Control" type="Control" parent="MainMenu"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -238,11 +316,15 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Label" type="Label" parent="MainMenu/Control"]
-layout_mode = 0
-offset_left = 952.0
-offset_top = 32.0
-offset_right = 1251.0
-offset_bottom = 110.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -320.0
+offset_top = 24.0
+offset_right = -21.0
+offset_bottom = 112.0
+grow_horizontal = 0
 theme_override_constants/line_spacing = 8
 text = "Made by:
 JulxsIV
@@ -264,3 +346,6 @@ autoplay = true
 bus = &"Music"
 playback_type = 1
 parameters/looping = true
+
+[connection signal="pressed" from="PauseMenu/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="PauseMenu/Control/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MainMenuButton" to="." method="_on_main_menu_button_pressed"]

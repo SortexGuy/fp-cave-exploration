@@ -1,7 +1,7 @@
 [gd_scene load_steps=40 format=3 uid="uid://coq2iqn1v0an"]
 
 [ext_resource type="PackedScene" uid="uid://bed8les37cpj3" path="res://src/character.tscn" id="1_0dk8b"]
-[ext_resource type="Script" path="res://src/world.gd" id="1_di5p2"]
+[ext_resource type="Script" uid="uid://bmhhpnmqqk6ql" path="res://src/world.gd" id="1_di5p2"]
 [ext_resource type="PackedScene" uid="uid://cm8gwnf1y21ws" path="res://resources/cave_map_finalw_colision.tscn" id="2_t762b"]
 [ext_resource type="PackedScene" uid="uid://dte72467i7q1d" path="res://src/objects/pickaxe.tscn" id="3_uri07"]
 [ext_resource type="PackedScene" uid="uid://dj0w1jrfgwtyo" path="res://src/objects/casco_linterna.tscn" id="5_21r5d"]
