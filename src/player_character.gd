@@ -29,11 +29,13 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var head_pivot: Node3D = %HeadPivot
 @onready var main_cam: Camera3D = %MainCamera
 @onready var flashlight: SpotLight3D = %Flashlight
-@onready var wall_climb_cast: ShapeCast3D = %WallClimbCast
+@onready var wall_check_cast: ShapeCast3D = %WallCheckCast
 @onready var wall_grab_cast: ShapeCast3D = %WallGrabCast
 @onready var pickaxe_cast: ShapeCast3D = %PickaxeCast
 @onready var interaction_cast: ShapeCast3D = %InteractionCast
 @onready var anti_clip_cast: ShapeCast3D = %AntiClipCast
+@onready var stick_point_holder: Marker3D = %StickPointHolder
+@onready var stick_point: Marker3D = %StickPoint
 
 @onready var high_body_collision: CollisionShape3D = %HighBodyCollision
 @onready var high_body: Area3D = %HighBody
@@ -86,6 +88,7 @@ func _grounded_state(delta: float) -> void:
 	elif Input.is_action_just_pressed("ui_accept"):
 		velocity.y = JUMP_VELOCITY
 		
+		sound_fx.sfx_animations.stop()
 		previous_state = player_state
 		player_state = PLAYER_STATES.MIDAIR
 	elif Input.is_action_just_pressed("crouch_toggle"):
@@ -96,17 +99,18 @@ func _grounded_state(delta: float) -> void:
 		sound_fx.run_state_change.emit(false)
 		previous_state = player_state
 		player_state = PLAYER_STATES.CROUCHING
-	elif Input.is_action_just_pressed("grab_wall") and wall_climb_cast.enabled:
-		wall_climb_cast.force_shapecast_update()
-		if wall_climb_cast.is_colliding():
-			var res = wall_climb_cast.collision_result.front()
-			
-			wall_direction = -res.normal
+	elif Input.is_action_just_pressed("grab_wall") and wall_check_cast.enabled:
+		wall_check_cast.force_shapecast_update()
+		if wall_check_cast.is_colliding():
+			var res = wall_check_cast.collision_result.front()
+			wall_direction = (res.point - wall_check_cast.global_position).normalized()
 			var grab_xform: = wall_grab_cast.global_transform
 			wall_grab_cast.global_transform.basis = grab_xform.basis.looking_at(
 				grab_xform.origin + wall_direction)
 			velocity = Vector3.ZERO
-		
+			
+			sound_fx.sfx_animations.stop()
+			prev_dir_zero = true
 			previous_state = player_state
 			player_state = PLAYER_STATES.CLIMBING
 
@@ -114,6 +118,9 @@ func _midair_state(delta: float) -> void:
 	# Add the gravity.
 	velocity.y -= gravity * MASS * delta
 	if is_on_floor():
+		sound_fx.sfx_animations.stop()
+		prev_dir_zero = true
+		
 		previous_state = player_state
 		player_state = PLAYER_STATES.GROUNDED
 
@@ -136,11 +143,12 @@ func _climbing_state(delta: float) -> void:
 	if (head_pivot.transform.basis * Vector3.FORWARD)\
 		.normalized().dot(wall_direction) < -0.4 or \
 		not Input.is_action_pressed("grab_wall") or \
-		not is_on_wall():
+		not wall_grab_cast.is_colliding():
 		
+		sound_fx.sfx_animations.stop()
+		prev_dir_zero = true
 		previous_state = player_state
 		player_state = PLAYER_STATES.MIDAIR
-		
 
 func _movement_process(delta: float) -> void:
 	# Toggle run.
@@ -164,11 +172,12 @@ func _movement_process(delta: float) -> void:
 	
 	move_and_slide()
 	
-	if prev_dir_zero and not input_dir.is_zero_approx():
-		sound_fx.sfx_animations.play("FootSteps")
-	elif not prev_dir_zero and input_dir.is_zero_approx():
-		sound_fx.sfx_animations.stop()
-	prev_dir_zero = input_dir.is_zero_approx()
+	if player_state == PLAYER_STATES.GROUNDED:
+		if prev_dir_zero and not input_dir.is_zero_approx():
+			sound_fx.sfx_animations.play("FootSteps")
+		elif not prev_dir_zero and input_dir.is_zero_approx():
+			sound_fx.sfx_animations.stop()
+		prev_dir_zero = input_dir.is_zero_approx()
 
 func _handle_pickaxe(delta: float) -> void:
 	if Input.is_action_pressed("use_pickaxe") and pickaxe_timer.is_stopped():
@@ -219,29 +228,33 @@ func _handle_interaccion(delta: float) -> void:
 
 func _wall_movement(delta: float) -> void:
 	wall_grab_cast.force_shapecast_update()
-	var wall_basis: Vector3 = wall_grab_cast.global_transform.basis * Vector3.FORWARD
-	var xform: Transform3D
-	if wall_grab_cast.is_colliding():
-		var res: Dictionary = wall_grab_cast.collision_result.front()
-		var point: Vector3 = res.point - (res.normal * 0.5)
-		xform = wall_grab_cast.global_transform.looking_at(point)
-		wall_grab_cast.global_transform = xform
-	else:
-		xform = wall_climb_cast.global_transform
+	if not wall_grab_cast.is_colliding():
+		return
 	
-	var speed = SLOW_SPEED
+	var wall_basis: Vector3 = wall_grab_cast.global_transform.basis * Vector3.FORWARD
+	var res: Dictionary = wall_grab_cast.collision_result.front()
+	wall_direction = (res.point - wall_grab_cast.global_position).normalized()
+	var point: Vector3 = res.point - (
+			wall_grab_cast.global_position - res.point).normalized() * .2
+	var xform: Transform3D = wall_grab_cast.global_transform.looking_at(point)
+	wall_grab_cast.global_transform = xform
+	
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-	var direction = (xform.basis * Vector3(input_dir.x, -input_dir.y, -0.75)).normalized()
+	var direction = (xform.basis * Vector3(input_dir.x, -input_dir.y, .0)).normalized()
+	
+	### New Wall Grab
+	#sticks player to the wall
+	stick_point_holder.global_transform.origin = point
+	self.global_transform.origin.x = stick_point.global_transform.origin.x
+	self.global_transform.origin.z = stick_point.global_transform.origin.z
+	
+	var speed = SLOW_SPEED
 	if input_dir:
 		velocity = direction * speed
-		#velocity.x = direction.x * speed
-		#velocity.y = direction.y * speed
 	else:
 		velocity = Vector3.ZERO
-		#velocity.x = move_toward(velocity.x, 0, WALK_SPEED)
-		#velocity.y = move_toward(velocity.y, 0, WALK_SPEED)
 	
 	move_and_slide()
 	
@@ -266,7 +279,7 @@ func mods_added(mod: ModManager.Modifiers) -> void:
 		ModManager.Modifiers.GasMask:
 			sound_fx.gas_mask.play()
 		ModManager.Modifiers.Piolet:
-			wall_climb_cast.enabled = true
+			wall_check_cast.enabled = true
 		ModManager.Modifiers.Pickaxe:
 			pickaxe_cast.enabled = true
 
@@ -278,7 +291,7 @@ func mods_removed(mod: ModManager.Modifiers) -> void:
 		ModManager.Modifiers.GasMask:
 			sound_fx.gas_mask.stop()
 		ModManager.Modifiers.Piolet:
-			wall_climb_cast.enabled = false
+			wall_check_cast.enabled = false
 		ModManager.Modifiers.Pickaxe:
 			pickaxe_cast.enabled = false
 
